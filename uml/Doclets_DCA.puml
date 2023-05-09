@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class FirstDoclet
+
+package Western
+{
+}
+
+class Java2Puml
+
+class PumlDiagram
+
+interface Doclet <<interface>>
+
+
+FirstDoclet ...|> Doclet
+FirstDoclet " 1\t" --- "1\npackage" Western : récupère >
+Java2Puml " 1\t" -- "1\ndoclet" FirstDoclet : appelle >
+FirstDoclet  " 1" ---- "1\ndiagrammeUML" PumlDiagram : crée >
+
+
+
+@enduml

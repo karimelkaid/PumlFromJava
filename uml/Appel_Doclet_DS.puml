@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide footbox
+
+participant MyDoclet.class as main
+participant "doclet : Doclet" as doclet
+
+[o-> main ++: main(args)
+|||
+
+main -->> doclet ** : <<Create>> Doclet()
+
+main -> doclet ++: init(locale, reporter)
+deactivate
+
+main -> doclet ++: getSupportedOptions()
+return supportedOptions = getSupportedOptions()
+|||
+
+main -> doclet ++ : getSupportedSourceVersion()
+return supportedSourceVersion = getSupportedSourceVersion()
+|||
+
+alt run is success
+
+    main -> doclet ++: run(environment)
+    return run_success = run()
+
+end alt
+
+
+
+
+
+@enduml

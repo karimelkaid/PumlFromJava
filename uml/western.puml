@@ -1,0 +1,17 @@
+@startuml
+
+class Histoire4
+class Histoire2
+class Boisson
+class Personnage
+class Dame
+class Brigand
+class Ripou
+class HorsLaLoi
+class Genre
+class Nommable
+class Cowboy
+class Substantif
+class Narrateur
+
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class FirstDoclet
+{
+    + init(Locale:locale, Reporter:reporter) {redefined Doclet::init()}
+    + getName() : String {redefined Doclet::getName()}
+    + getSupportedOptions() : Set<? extends Option> {redefined Doclet::getSupportedOptions()}
+    + getSupportedSourceVersion() : SourceVersion {redefined Doclet::getSupportedSourceVersion()}
+    + run(DocletEnvironment:environment) : Boolean {redefined Doclet::run()}
+
+}
+
+
+package Western
+{
+
+}
+
+
+class Java2Puml
+{
+    +{static} main(String[]:args)
+}
+
+
+class PumlDiagram
+
+
+interface Doclet <<interface>>
+{
+    + init(Locale:locale, Reporter:reporter)
+    + getName() : String
+    + getSupportedOptions() : Set<? extends Option>
+    + getSupportedSourceVersion() : SourceVersion
+    + run(DocletEnvironment:environment) : Boolean
+}
+
+FirstDoclet ...|> Doclet
+FirstDoclet " 1\t" --- "1\npackage" Western : récupère >
+Java2Puml " 1\t" -- "1\ndoclet" FirstDoclet : appelle >
+FirstDoclet  " 1" ---- "1\ndiagrammeUML" PumlDiagram : crée >
+
+
+
+@enduml
