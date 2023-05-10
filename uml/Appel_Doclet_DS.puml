@@ -3,28 +3,42 @@
 
 hide footbox
 
-participant MyDoclet.class as main
+participant Java2Puml.class as main
 participant "doclet : Doclet" as doclet
+participant ToolProvider.class as TP
+participant "toolProvider : ToolProvider" as toolProvider
+participant "environnement : DocletEnvironnement" as environnement
 
 [o-> main ++: main(args)
 |||
 
-main -->> doclet ** : <<Create>> Doclet()
+main -> TP ++ : findFirst("javadoc")
 
-main -> doclet ++: init(locale, reporter)
+'Celui là pas sûr
+TP -->> toolProvider ** : <<Create>> ToolProvider()
+
+return toolProvider = findFirst()
+
+main -> toolProvider ++ : run(System.out, System.err, arguments)
+
+toolProvider -->> doclet ** : <<Create>> Doclet()
+
+toolProvider -> doclet ++: init(locale, reporter)
 deactivate
 
-main -> doclet ++: getSupportedOptions()
+toolProvider -> doclet ++: getSupportedOptions()
 return supportedOptions = getSupportedOptions()
 |||
 
-main -> doclet ++ : getSupportedSourceVersion()
+toolProvider -> doclet ++ : getSupportedSourceVersion()
 return supportedSourceVersion = getSupportedSourceVersion()
 |||
 
+'toolProvider -->> environnement **: <<Create>> DocletEnvironnement()
+
 alt run is success
 
-    main -> doclet ++: run(environment)
+    toolProvider -> doclet ++: run(environment)
     return run_success = run()
 
 end alt

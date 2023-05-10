@@ -6,6 +6,7 @@ import jdk.javadoc.doclet.Reporter;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import java.io.FileWriter;
 import java.util.*;
 
@@ -150,30 +151,9 @@ public class PumlDoclet implements Doclet {
             dumpElement(element);
         }*/
 
-        if( repertoireDestination == null )
-        {
-            repertoireDestination = ".";
-        }
+        PumlDiagram pumlDiagram = new PumlDiagram(repertoireDestination, nomFichierACree, environment);
+        pumlDiagram.generePuml();
 
-        List<String> nomClasses = recupNomsClasses(environment);
-        try
-        {
-            // Création du fichier puml au bon emplacement
-            String filePath = repertoireDestination +"/"+ nomFichierACree;
-            FileWriter fw = new FileWriter(filePath);
-
-            // Remplissage du code PUML à mettre plus tard dans le fichier PUML
-            String chPuml = ecrisCodePuml(nomClasses);
-
-            // Écriture dans le fichier PUML et fermeture du flux
-            fw.write(chPuml.toString());
-            fw.flush();
-            fw.close();
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
 
         return true;
     }
@@ -190,43 +170,7 @@ public class PumlDoclet implements Doclet {
         System.out.println();
     }
 
-    public List<String> recupNomsClasses(DocletEnvironment Xenvironment)
-    {
-        List<String> res = new ArrayList<>();
 
-        // Récupération du/des élément(s) spécifié(s)
-        Set<? extends Element> specifiedElements = Xenvironment.getSpecifiedElements();
-
-        // Parcourt du/des élément(s) spécifié(s)
-        for (Element element : specifiedElements)
-        {
-            // Si l'utilisateur n'a pas spécifié de nom pour le PUML à créer, alors on lui attribue le premier élément sélectionné
-            if(nomFichierACree == null)
-            {
-                nomFichierACree = element.getSimpleName().toString() + ".puml";
-            }
-
-            // Parcourt des classes du package
-            for (Element enclosedElement : element.getEnclosedElements())
-            {
-                res.add(enclosedElement.getSimpleName().toString());    // Ajout du nom de la classe actuelle à la liste
-            }
-        }
-        return res;
-    }
-
-    public String ecrisCodePuml(List<String> XnomClasses)
-    {
-        StringBuilder res = new StringBuilder("@startuml\n\n");
-
-        for( String nomClasse : XnomClasses )
-        {
-            res.append( "class "+nomClasse+"\n" );
-        }
-        res.append("\n@enduml\n");
-
-        return res.toString();
-    }
 
 
 }

@@ -1,31 +1,23 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-class FirstDoclet
+class PumlDoclet
 {
     + init(Locale:locale, Reporter:reporter) {redefined Doclet::init()}
     + getName() : String {redefined Doclet::getName()}
     + getSupportedOptions() : Set<? extends Option> {redefined Doclet::getSupportedOptions()}
     + getSupportedSourceVersion() : SourceVersion {redefined Doclet::getSupportedSourceVersion()}
     + run(DocletEnvironment:environment) : Boolean {redefined Doclet::run()}
-
 }
-
-
-package Western
-{
-
-}
+class ToolProvider
 
 
 class Java2Puml
 {
-    +{static} main(String[]:args)
+    + {static} main(String[]:args)
 }
 
-
 class PumlDiagram
-
 
 interface Doclet <<interface>>
 {
@@ -35,11 +27,21 @@ interface Doclet <<interface>>
     + getSupportedSourceVersion() : SourceVersion
     + run(DocletEnvironment:environment) : Boolean
 }
+interface "Doclet.Option" as docletOption <<interface>>
+enum "Doclet.Option.Kind" as docletOptionKind <<enum>>
 
-FirstDoclet ...|> Doclet
-FirstDoclet " 1\t" --- "1\npackage" Western : récupère >
-Java2Puml " 1\t" -- "1\ndoclet" FirstDoclet : appelle >
-FirstDoclet  " 1" ---- "1\ndiagrammeUML" PumlDiagram : crée >
+interface DocletEnvironnement <<interface>>
+
+Java2Puml ..> ToolProvider : <<instanciate>>
+
+PumlDoclet ..> DocletEnvironnement : <<use>>
+Doclet ..> DocletEnvironnement : <<use>>
+docletOption ..> Doclet : <<in>>
+docletOptionKind ..> docletOption : <<in>>
+
+PumlDoclet ...|> Doclet
+Java2Puml " 1\t" -- "1\ndoclet" PumlDoclet : appelle >
+PumlDoclet  " 1" ...> "1\ndiagrammeUML" PumlDiagram : <<instanciate>>
 
 
 

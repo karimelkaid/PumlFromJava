@@ -1,17 +1,49 @@
 @startuml
 
-class Histoire4
-class Histoire2
-class Boisson
-class Personnage
-class Dame
-class Brigand
-class Ripou
-class HorsLaLoi
-class Genre
-class Nommable
-class Cowboy
-class Substantif
-class Narrateur
+class Histoire4{
+}
+
+class Histoire2{
+}
+
+class Boisson{
+}
+
+class Personnage{
+}
+
+class Dame{
+	estLibre
+}
+
+class Brigand{
+	recompense
+	estLibre
+}
+
+class Ripou{
+}
+
+interface HorsLaLoi <<interface>>{
+}
+
+enum Genre <<enum>>{
+	FEMININ
+	MASCULIN
+}
+
+interface Nommable <<interface>>{
+}
+
+class Cowboy{
+	gains
+}
+
+class Substantif{
+}
+
+class Narrateur{
+}
+
 
 @enduml
