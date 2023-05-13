@@ -19,8 +19,8 @@ Java2Puml ..> ToolProvider : <<instanciate>>
 
 PumlDoclet ..> DocletEnvironnement : <<use>>
 Doclet ..> DocletEnvironnement : <<use>>
-docletOption ..> Doclet : <<in>>
-docletOptionKind ..> docletOption : <<in>>
+docletOption <.. Doclet : <<use>>
+docletOptionKind <.. docletOption : <<use>>
 
 PumlDoclet ...|> Doclet
 Java2Puml " 1\t" -- "1\ndoclet" PumlDoclet : appelle >
