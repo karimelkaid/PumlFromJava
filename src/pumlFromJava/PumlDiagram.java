@@ -85,6 +85,7 @@ public class PumlDiagram
     {
         StringBuilder res = new StringBuilder("@startuml\n\n");
 
+        res = ajoutePackage(res,classes);
         for( Element classe : classes )
         {
             res = ajouteTypeElement(res, classe);
@@ -178,6 +179,16 @@ public class PumlDiagram
 
         return res;
     }
+
+    public StringBuilder ajoutePackage(StringBuilder codePumlDeBase, List<Element> classes)
+    {
+        String nomPackage = classes.get(0).getEnclosingElement().getSimpleName().toString();    // Récupération du package (étant donné que nous étudions uniquement
+
+        StringBuilder res = new StringBuilder(codePumlDeBase);
+        res.append("package "+nomPackage+"{\n\t");
+        return res;
+    }
+
 
 
 
