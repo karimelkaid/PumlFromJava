@@ -146,6 +146,46 @@ ModuleElementDirective ..> ModuleElementDirectiveVisitor : <<use>>
 
 ModuleElementDirectiveVisitor ..> ModuleElementDirective : <<use>>
 
+interface Elements {
++ getAllAnnotationMirrors(e : Element) : AnnotationMirror[*]
++ getAllMembers(type : TypeElement) : Element[*]
++ getAllModuleElements() : ModuleElement[]
++ getAllPackageElements(name : CharSequence) : PackageElement[]
++ getAllTypeElements(name : CharSequence) : TypeElement[]
++ getBinaryName(type : TypeElement ) : Name
++ getConstantExpression(value : Object) : String
++ getDocComment(e : Element) : String
++ getElementValuesWithDefaults(a : AnnotationMirror) : Map<? extends ExecutableElement,? extends AnnotationValue>
++ getFileObjectOf(e : Element) : default JavaFileObject
++ getModuleElement(name : CharSequence) :  default ModuleElement
++ getModuleOf(e : Element) : default ModuleElement
++ getName(cs CharSequence) : Name
++ getOrigin(c : AnnotatedConstruct, a : AnnotationMirror) : default Elements.Origin
++ getOrigin(e : Element) : default Elements.Origin
++ getOrigin(m : ModuleElement, directive : ModuleElement.Directive) : default Elements.Origin
++ getOutermostTypeElement(e : Element) : default TypeElement
++ getPackageElement(name : CharSequence) : PackageElement
++ getPackageElement(module : ModuleElement, name : CharSequence) : default PackageElement
++ getPackageOf(e : Element) : PackageElement
++ getTypeElement(name : CharSequence) : CharSequence
++ getTypeElement(module : ModuleElement, name : CharSequence) : default TypeElement
++ hides(hider Element, hidden : Element) : Boolean
++ isAutomaticModule(module : ModuleElement) : default boolean
++ isBridge(e : ExecutableElement) : default boolean
++ isDeprecated(e : Element) : Boolean
++ isFunctionalInterface(type : TypeElement) : Boolean
++ overrides(overrider : ExecutableElement, overridden : ExecutableElement, type : TypeElement) : Boolean
++ printElements(w : Writer, Element... elements)
++ recordComponentFor(accessor : ExecutableElement) : default RecordComponentElement
+
+}
+Elements ..> Element : <<use>>
+Elements ..> TypeElement : <<use>>
+Elements ..> ExecutableElement : <<use>>
+Elements ..> ModuleElement : <<use>>
+Elements ..> ModuleElementDirective : <<use>>
+Elements ..> AnnotatedConstruct : <<use>>
+Elements ..> AnnotationMirror : <<use>>
 
 
 
