@@ -147,11 +147,11 @@ ModuleElementDirective ..> ModuleElementDirectiveVisitor : <<use>>
 ModuleElementDirectiveVisitor ..> ModuleElementDirective : <<use>>
 
 interface Elements {
-+ getAllAnnotationMirrors(e : Element) : AnnotationMirror[*]
-+ getAllMembers(type : TypeElement) : Element[*]
-+ getAllModuleElements() : ModuleElement[]
-+ getAllPackageElements(name : CharSequence) : PackageElement[]
-+ getAllTypeElements(name : CharSequence) : TypeElement[]
++ getAllAnnotationMirrors(e : Element) : ? extends AnnotationMirror[*]
++ getAllMembers(type : TypeElement) : ? extends Element[*]
++ getAllModuleElements() : ? extends ModuleElement[]
++ getAllPackageElements(name : CharSequence) : ? extends PackageElement[]
++ getAllTypeElements(name : CharSequence) : ? extends TypeElement[]
 + getBinaryName(type : TypeElement ) : Name
 + getConstantExpression(value : Object) : String
 + getDocComment(e : Element) : String
