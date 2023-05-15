@@ -1,5 +1,6 @@
 package pumlFromJava;
 
+import com.sun.source.util.DocTrees;
 import jdk.javadoc.doclet.DocletEnvironment;
 
 import javax.lang.model.element.Element;
@@ -11,9 +12,9 @@ import java.util.Set;
 
 public class PumlDiagram
 {
-    String repertoireDestination;
-    String nomFichierACree;
-    DocletEnvironment environment;
+    private String repertoireDestination;
+    private String nomFichierACree;
+    private DocletEnvironment environment;
 
     public PumlDiagram( String repertoireDestination, String nomFichierACree, DocletEnvironment environment )
     {
@@ -55,12 +56,12 @@ public class PumlDiagram
 
     }
 
-    public List<Element> recupClasses(DocletEnvironment Xenvironment)
+    public List<Element> recupClasses(DocletEnvironment environment)
     {
         List<Element> res = new ArrayList<>();
 
         // Récupération du/des élément(s) spécifié(s)
-        Set<? extends Element> specifiedElements = Xenvironment.getSpecifiedElements();
+        Set<? extends Element> specifiedElements = environment.getSpecifiedElements();
 
         // Parcourt du/des élément(s) spécifié(s)
         for (Element element : specifiedElements)

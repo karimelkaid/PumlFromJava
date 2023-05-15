@@ -1,0 +1,152 @@
+@startuml
+'https://plantuml.com/interface-diagram
+interface AnnotatedConstruct <<interface>>
+interface TypeMirror <<interface>> extends AnnotatedConstruct
+{
++getKind() : TypeKind
++toString() : String
+}
+interface Element extends AnnotatedConstruct{
++ getEnclosedElements() : [*]
++ getEnclosingElement() : Element
++ getKind() : ElementKind
++ getModifiers() : Modifier[]
++ getSimpleName() : Name
++ accept(ElementVisitor<R,P> v, P p): <R,P> R
++ asType(): TypeMirror
++ equals(obj : Object): Boolean
++ hashCode() : int
+}
+ElementKind --> Element
+
+enum ElementKind{
+ANNOTATION_TYPE
+CLASS
+CONSTRUCTOR
+ENUM
+ENUM_CONSTANT
+EXCEPTION_PARAMETER
+FIELD
+INSTANCE_INIT
+INTERFACE
+LOCAL_VARIABLE
+METHOD
+MODULE
+OTHER
+PACKAGE
+PARAMETER
+RESSOURCE_VARIABLE
+STATIC_INIT
+TYPE_PARAMETER
++ isClass() : Boolean
++ isField(): Boolean
++ isInterface(): Boolean
+}
+enum Modifier <<enum>> {
+    PUBLIC
+    DEFAULT
+    FINAL
+    STATIC
+    PRIVATE
+    PROTECTED
+    ABSTRACT
+}
+
+interface  Parameterizable extends Element {
++ getTypeParameters() : TypeParameterElement[*]
+}
+
+interface QualifiedNameable extends Element{
++ getQualifiedName() : Name
+}
+interface VariableElement extends Element{
++ getConstantValue() :Object
+}
+interface TypeParameterElement extends Element{
++ getBounds() : TypeMirror[*]
++ getGenericElement() : Element
+}
+interface ExecutableElement extends Parameterizable{
++ isDefault() : boolean
++ getDefaultValue() : AnnotationValue
++ getParameters() : VariableElement[*]
++ getReceiverType() : TypeMirror
++ getReturnType() : TypeMirror
++ getThrownTypes() : TypeMirror[*]
++ isVarARgs() : boolean
+}
+interface TypeElement extends Parameterizable, QualifiedNameable{
++ getInterfaces() : TypeMirror[*]
++ getNestingKind() : NestingKind
++ getSuperinterface() : TypeMirror
+}
+enum NestingKind{
+ANONYMOUS
+LOCAL
+MEMBER
+TOP_LEVEL
++ isNested() : boolean
+}
+
+interface PackageElement extends QualifiedNameable{
++ isUnamed() : boolean
+}
+interface ModuleElement extends QualifiedNameable {
++ getDirectives() : Directive[*]
++ isOpen() : boolean
++ isUnamed() : boolean
+}
+interface "ModuleElement.Directive" as ModuleElementDirective {
++ getKind() : DirectiveKind
++ accept(DirectiveVisitor<R, P>v, P p) : <R,P> R
+}
+ModuleElementDirective --> Element
+
+interface "ModuleElement.ExportsDirective" as ModuleElementExportsDirective extends ModuleElementDirective {
++ getPackage() : PackageElement
++ getTargetModules() : ModuleElement[*]
+}
+
+interface "ModuleElement.RequiresDirective" as ModuleElementRequiresDirective extends ModuleElementDirective {
++ getDependency() : ModuleElement
++ isStatic() : Boolean
++ isTransitive() : Boolean
+}
+
+interface "ModuleElement.ProvidesDirective" as ModuleElementProvidesDirective extends ModuleElementDirective {
++ getImplentations() : TypeElement[*]
++ getService() : TypeElement
+}
+interface "ModuleElement.UsesDirective" as ModuleElementUsesDirective{
++ getService() TypeElement
+}
+
+interface "ModuleElement.OpensDirective" as ModuleElementUsesDirective extends ModuleElementDirective{
++ getPackage() : PackageElement
++ getTargetModules() ModuleElement[*]
+}
+enum "ModuleElement.DirectiveKind" as ModuleElementDirectiveKind{
+EXPORTS,OPENS,PROVIDES,REQUIRES,USES
+}
+ModuleElementDirectiveKind --> ModuleElementDirective
+
+
+interface "ModuleElement.DirectiveVisitor" as ModuleElementDirectiveVisitor {
++ visit(d : Directive)
++ visit(d, P p : Directive)
++ visitExports(d, P p : ExportsDirective)
++ visitOpens(d, P p : OpensDirective)
++ visitProvides(d, P p : ProvidesDirective)
++ visitRequires(d, P p : RequiresDirective)
++ visitUnknown(d, P p : Directive)
++ visitUses(d, P p : UsesDirective)
+}
+
+ModuleElementDirective ..> ModuleElementDirectiveVisitor : <<use>>
+
+ModuleElementDirectiveVisitor ..> ModuleElementDirective : <<use>>
+
+
+
+
+@enduml
