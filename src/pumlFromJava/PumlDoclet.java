@@ -41,6 +41,7 @@ public class PumlDoclet implements Doclet {
 
     private String nomFichierACree;
     private String repertoireDestination;
+    private boolean dca = false;
     @Override
     public Set<? extends Option> getSupportedOptions() {
         // This doclet does not support any options.
@@ -122,7 +123,47 @@ public class PumlDoclet implements Doclet {
                         nomFichierACree = arguments.get(0)+".puml";
                         return true;
                     }
-                }
+                },
+
+                // Ajout de l'option --dca
+                new Option() {
+                    private final List<String> someOption = List.of(
+                            "--dca"
+                    );
+
+                    @Override
+                    public int getArgumentCount() {
+                        return 0;
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "demande de production d'un DCA";
+                    }
+
+                    @Override
+                    public Option.Kind getKind() {
+                        return Option.Kind.STANDARD;
+                    }
+
+                    @Override
+                    public List<String> getNames() {
+                        return someOption;
+                    }
+
+                    @Override
+                    public String getParameters() {
+                        return "";
+                    }
+
+                    @Override
+                    public boolean process(String opt, List<String> arguments)
+                    {
+                        dca = true;
+                        return true;
+                    }
+                },
+
         };
 
         return Set.of(options);
@@ -151,7 +192,7 @@ public class PumlDoclet implements Doclet {
             dumpElement(element);
         }*/
 
-        PumlDiagram pumlDiagram = new PumlDiagram(repertoireDestination, nomFichierACree, environment);
+        PumlDiagram pumlDiagram = new PumlDiagram(repertoireDestination, nomFichierACree, environment, dca);
         pumlDiagram.generePuml();
 
 

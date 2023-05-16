@@ -39,6 +39,10 @@ class PumlDiagram
     + ajouteTypeElement(codePumlDeBase : String, classe : Element) : StringBuilder
     + ajouteChamps(codePumlDeBase : StringBuilder, classe : Element) : StringBuilder
 
+    'Ajout de méthodes'
+    + ajouteAgregations(res : String, classe : Element) : StringBuilder
+    + liaisonExistante(agregationsExistantes : String[*], liaison : String) : Boolean
+
 }
 
 interface Doclet <<interface>>
