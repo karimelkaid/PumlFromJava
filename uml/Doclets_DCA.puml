@@ -8,6 +8,14 @@ class ToolProvider
 class Java2Puml
 
 class PumlDiagram
+class PumlPackage
+class PumlChamps
+class PumlTypeClass
+class PumlRelation
+class PumlImplementation
+class PumlSuperClass
+class PumlAgregation
+
 
 interface Doclet <<interface>>
 interface "Doclet.Option" as docletOption <<interface>>
@@ -25,6 +33,17 @@ docletOptionKind <.. docletOption : <<use>>
 PumlDoclet ...|> Doclet
 Java2Puml " 1\t" -- "1\ndoclet" PumlDoclet : appelle >
 PumlDoclet  " 1" ...> "1\ndiagrammeUML" PumlDiagram : <<instanciate>>
+
+
+PumlDiagram ..> PumlPackage : <<instanciate>>
+PumlDiagram ..> PumlTypeClass : <<instanciate>>
+PumlDiagram ..> PumlChamps : <<instanciate>>
+PumlDiagram ..> PumlRelation : <<instanciate>>
+
+PumlRelation ..> PumlAgregation : <<instanciate>>
+PumlRelation ..> PumlSuperClass : <<instanciate>>
+PumlRelation ..> PumlImplementation : <<instanciate>>
+
 
 
 

@@ -1,6 +1,6 @@
 @startuml
 
-package western{
+package [western]{
 	class Histoire4{
 }
 
@@ -41,7 +41,7 @@ class Ripou extends Cowboy implements HorsLaLoi{
 Ripou -- Brigand
 
 
-interface HorsLaLoi <<interface>>{
+interface HorsLaLoi <<interface>> extends Nommable{
 }
 
 

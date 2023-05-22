@@ -9,6 +9,88 @@ class PumlDoclet
     + getSupportedSourceVersion() : SourceVersion {redefined Doclet::getSupportedSourceVersion()}
     + run(DocletEnvironment:environment) : Boolean {redefined Doclet::run()}
 }
+
+class PumlPackage
+{
+    - environment : DocletEnvironment
+    <<Create>> PumlPackage(environnement : DocletEnvironment)
+    + ajoutePackage(codePumlDeBase : StringBuilder) : StringBuilder
+}
+PumlPackage ..> DocletEnvironment : <<use>>
+
+class PumlChamps
+{
+    - classe : Element
+    - champs : String[*]
+
+    <<Create>> PumlChamps(classe : Element)
+    + ajouteChamps(codePumlDeBase : StringBuilder) : StringBuilder
+    + getPrimitiveFieldsNamesAndConstEnum() : String[*]
+}
+PumlChamps ..> Element : <<use>>
+
+class PumlTypeClasse
+{
+    - classe : Element
+    - typeClasse : String
+
+    + <<Create>> PumlTypeClasse(classe : Element)
+    + ajouteTypeClasse(codePumlDeBase : StringBuilder) : StringBuilder
+    + getTypeClasse() : String
+}
+PumlTypeClasse ..> Element : <<use>>
+
+class PumlRelation
+{
+    - classe : Element
+    - typeClasse : String
+    - pumlAgregation : PumlAgregation
+    - pumlSuperClass : PumlSuperClass
+    - pumlImplementation : PumlImplementation
+
+    + <<Create>> PumlRelation(classe : Element)
+    + ajouteAgregations(codePumlDeBase : StringBuilder) : StringBuilder
+    + ajouteSuperClass(codePumlDeBase : StringBuilder) : StringBuilder
+    + ajouteImplementations(codePumlDeBase : StringBuilder) : StringBuilder
+}
+PumlRelation ..> Element : <<use>>
+
+class PumlImplementation
+{
+    classe : Element
+    nomInterfaces : String[*]
+    typeClasse : String
+
+    + <<Create>> PumlImplementation(classe : Element, typeClasse : String)
+    + ajouteImplementations(codePumlDeBase : StringBuilder) : StringBuilder
+    + getInterfaces() : String[*]
+}
+PumlImplementation ..> Element : <<use>>
+
+class PumlSuperClass
+{
+    - classe : Element
+    - nomSuperClasse : String
+
+    + <<Create>> PumlSuperClass(classe : Element)
+    + ajouteSuperClass(codePumlDeBase : StringBuilder) : StringBuilder
+    + getSuperClassName() : String
+}
+PumlSuperClass ..> Element : <<use>>
+
+class PumlAgregation
+{
+    - classe : Element
+    - agregationsExistantes : String[*]
+    - typeNonVoulu : String[*]
+
+    + <<Create>> PumlAgregation(classe : Element)
+    + ajouteAgregations(codePumlDeBase : StringBuilder) : StringBuilder
+    + liaisonExistante(agregationsExistantes : String[*], liaison : String) : Boolean
+    + inverseLiaison(liaison : String) : String
+}
+PumlAgregation ..> Element : <<use>>
+
 class ToolProvider
 {
     + findFirst(name : String) : ToolProvider
@@ -34,10 +116,6 @@ class PumlDiagram
     + generePuml()
     + recupClasses(environment : DocletEnvironment) : Element[*]
     + ecrisCodePuml(classes : Element[*]) : String
-    + getStereotype(classe : Element) : String
-    + getPrimitiveFieldsNamesAndConstEnum(classe : Element) : String[*]
-    + ajouteTypeElement(codePumlDeBase : String, classe : Element) : StringBuilder
-    + ajouteChamps(codePumlDeBase : StringBuilder, classe : Element) : StringBuilder
 
 }
 
@@ -156,5 +234,16 @@ class DocTrees extends Trees
     + getDocTreeFactory() : DocTreeFactory
     + getCharacters(tree : EntityTree) : String
 }
+
+
+PumlDiagram ..> PumlPackage : <<instanciate>>
+PumlDiagram ..> PumlTypeClasse : <<instanciate>>
+PumlDiagram ..> PumlChamps : <<instanciate>>
+PumlDiagram ..> PumlRelation : <<instanciate>>
+
+PumlRelation ..> PumlAgregation : <<instanciate>>
+PumlRelation ..> PumlSuperClass : <<instanciate>>
+PumlRelation ..> PumlImplementation : <<instanciate>>
+
 
 @enduml
