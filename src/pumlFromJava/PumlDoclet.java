@@ -6,9 +6,9 @@ import jdk.javadoc.doclet.Reporter;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import java.io.FileWriter;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 
 /**
@@ -41,7 +41,9 @@ public class PumlDoclet implements Doclet {
 
     private String nomFichierACree;
     private String repertoireDestination;
+
     private boolean dca = false;
+
     @Override
     public Set<? extends Option> getSupportedOptions() {
         // This doclet does not support any options.
@@ -64,8 +66,8 @@ public class PumlDoclet implements Doclet {
                     }
 
                     @Override
-                    public Option.Kind getKind() {
-                        return Option.Kind.STANDARD;
+                    public Kind getKind() {
+                        return Kind.STANDARD;
                     }
 
                     @Override
@@ -103,8 +105,8 @@ public class PumlDoclet implements Doclet {
                     }
 
                     @Override
-                    public Option.Kind getKind() {
-                        return Option.Kind.STANDARD;
+                    public Kind getKind() {
+                        return Kind.STANDARD;
                     }
 
                     @Override
@@ -142,8 +144,8 @@ public class PumlDoclet implements Doclet {
                     }
 
                     @Override
-                    public Option.Kind getKind() {
-                        return Option.Kind.STANDARD;
+                    public Kind getKind() {
+                        return Kind.STANDARD;
                     }
 
                     @Override
@@ -162,7 +164,7 @@ public class PumlDoclet implements Doclet {
                         dca = true;
                         return true;
                     }
-                },
+                }
 
         };
 

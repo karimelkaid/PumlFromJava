@@ -15,7 +15,6 @@ import java.util.spi.ToolProvider;
 
     - À demander :
         - Est ce qu'on doit gérer le cas où on a un package contenant DES packages ? (par exemple dans western on a un package Scénario 1 etc...) Perso j'ai géré uniquement le cas où y a UN SEUL package
-
 */
 public class Java2Puml
 {
@@ -23,6 +22,7 @@ public class Java2Puml
     public static void main(String[] args)
     {
         String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","western", "-d", "uml" } ;
+        //String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","pumlFromJava.ElementsClasse", "-d", "uml" } ;
 
         ToolProvider toolProvider = ToolProvider.findFirst("javadoc").get();
         System.out.println(toolProvider.name());

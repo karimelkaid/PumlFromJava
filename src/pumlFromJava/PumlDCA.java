@@ -2,8 +2,6 @@ package pumlFromJava;
 
 import jdk.javadoc.doclet.DocletEnvironment;
 import pumlFromJava.ElementsClasse.PumlAttribut;
-import pumlFromJava.ElementsClasse.PumlConstructeur;
-import pumlFromJava.ElementsClasse.PumlMethod;
 import pumlFromJava.ElementsClasse.PumlTypeClasse;
 import pumlFromJava.Relations.PumlRelation;
 
@@ -11,24 +9,24 @@ import javax.lang.model.element.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PumlDCC
+public class PumlDCA
 {
     private DocletEnvironment environment;
     private List<Element> Classes;
 
-    public PumlDCC(DocletEnvironment environment, List<Element> Classes)
+    public PumlDCA(DocletEnvironment environment, List<Element> Classes)
     {
         this.environment = environment;
         this.Classes = new ArrayList<>(Classes);
     }
 
-    public String genereDCC()
+    public String genereDCA()
     {
-        String codeDCC = ecrisCodeDCC(Classes);
-        return codeDCC;
+        String codeDCA = ecrisCodeDCA(Classes);
+        return codeDCA;
     }
 
-    public String ecrisCodeDCC(List<Element> classes)
+    public String ecrisCodeDCA(List<Element> classes)
     {
         StringBuilder res = new StringBuilder("@startuml\n\n");
 
@@ -39,20 +37,16 @@ public class PumlDCC
         {
             PumlTypeClasse pumlTypeClasse = new PumlTypeClasse(classe);
             PumlAttribut pumlChamps = new PumlAttribut(classe);
-            PumlMethod pumlMethod = new PumlMethod(classe);
-            PumlConstructeur pumlConstructeur = new PumlConstructeur(classe);
             PumlRelation pumlRelation = new PumlRelation(classe);
 
             res = pumlTypeClasse.ajouteTypeClasse(res);
-            //res = pumlRelation.ajouteSuperClass(res);
-            //res = pumlRelation.ajouteImplementations(res);
+            res = pumlRelation.ajouteSuperClass(res);
+            res = pumlRelation.ajouteImplementations(res);
             res.append("{\n");
-            res = pumlChamps.ajouteChampsDCC(res);
-            res = pumlConstructeur.ajouteConstructeurs(res);
-            res = pumlMethod.ajouteMethodes(res);
+            res = pumlChamps.ajouteChampsDCA(res);
             res.append("}\n");
 
-            //res = pumlRelation.ajouteAgregations(res);    Pas d'agrégation dans le DCC
+            res = pumlRelation.ajouteAgregations(res);
 
             res.append("\n\n");
         }
@@ -60,6 +54,5 @@ public class PumlDCC
 
         return res.toString();
     }
-
 
 }
