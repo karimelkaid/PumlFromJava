@@ -5,22 +5,22 @@ import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class PumlConstructeur{
+public class PumlMethode
+{
 
     Element classe;
     String nomClasse;
-    List<ExecutableElement> constructeurs;
+    List<ExecutableElement> methodes;
 
-    public PumlConstructeur(Element classe)
+    public PumlMethode(Element classe)
     {
         this.classe = classe;
         this.nomClasse = classe.getSimpleName().toString();
-        this.constructeurs = new ArrayList<>();
+        this.methodes = new ArrayList<>();
     }
+
     public String getTypeSimplifie(TypeMirror typeMirror)
     {
         String res = "";
@@ -123,47 +123,49 @@ public class PumlConstructeur{
         return res;
     }
 
-    public StringBuilder ajouteConstructeurs(StringBuilder codePumlDeBase)
+
+
+    public StringBuilder ajouteMethodes(StringBuilder codePumlDeBase)
     {
-        StringBuilder codePumlConstructeur = new StringBuilder(codePumlDeBase);
-        constructeurs = getConstructeurs();
-        for (ExecutableElement constructeur : constructeurs)
+        StringBuilder codePumlMethode = new StringBuilder(codePumlDeBase);
+
+        methodes = getMethodes();
+
+        for (ExecutableElement methode : methodes)
         {
+            String visibilite = getVisibilite(methode);
+            codePumlMethode.append(visibilite + " ");
 
-            String visibilite = getVisibilite(constructeur);
-            codePumlConstructeur.append(visibilite + " ");
+            String static_ = getStatic(methode);
+            codePumlMethode.append(static_+" ");
 
-            codePumlConstructeur.append("<<Create>> ").append(nomClasse);
-
-
-            String parametres = getParametres(constructeur);
-            codePumlConstructeur.append(parametres);
-
-            codePumlConstructeur.append("\n");
+            String nomMethode = methode.getSimpleName().toString();
+            codePumlMethode.append(nomMethode);
 
 
+            String parametres = getParametres(methode);
+            codePumlMethode.append(parametres);
 
-        }
 
-        System.out.println(codePumlConstructeur);
-        return codePumlConstructeur;
-    }
+            // Par exemple passer de "java.lang.String" à "String"
+            String typeDeRetour = getTypeSimplifie(methode.getReturnType());
 
-    public List<ExecutableElement> getConstructeurs()
-    {
-        List<ExecutableElement> res = new ArrayList<>();
-
-        for (Element e : classe.getEnclosedElements())
-        {
-            // Si l'élément est un constructeur
-            if (e.getKind() == ElementKind.CONSTRUCTOR)
+            // Nous ajoutons le type de retour uniquement s'il n'est pas void
+            if( !typeDeRetour.equals("void") )
             {
-                res.add( (ExecutableElement) e);    // Casr pour avoir accès aux méthodes de la classe ExecutableElement
+                codePumlMethode.append(" : ").append(typeDeRetour);
             }
+
+            codePumlMethode.append("\n");
+
+
+
         }
 
-        return res;
+        System.out.println(codePumlMethode);
+        return codePumlMethode;
     }
+
 
 
     public String getVisibilite(ExecutableElement methode) {
@@ -190,9 +192,28 @@ public class PumlConstructeur{
         return res;
     }
 
+    public String getStatic(ExecutableElement methode)
+    {
+        String res = "";
+
+        Set<Modifier> modifiers = methode.getModifiers();
+
+        // Parcourt des modifiers
+        for( Modifier m : modifiers )
+        {
+            if( m == Modifier.STATIC )
+            {
+                res = "{static}";
+            }
+        }
+
+        return res;
+    }
+
+
     public String getParametres(ExecutableElement methode)
     {
-        StringBuilder parametres = new StringBuilder("");
+        StringBuilder parametres = new StringBuilder();
         parametres.append("(");
         for (VariableElement parameter : methode.getParameters())
         {
@@ -207,6 +228,21 @@ public class PumlConstructeur{
 
         parametres.append(")");
         return parametres.toString();
+    }
+
+    public List<ExecutableElement> getMethodes()
+    {
+        List<ExecutableElement> res = new ArrayList<>();
+
+        for( Element e : classe.getEnclosedElements() )
+        {
+            if( e.getKind().equals(ElementKind.METHOD) )
+            {
+                res.add( (ExecutableElement)e );
+            }
+        }
+
+        return res;
     }
 
 }

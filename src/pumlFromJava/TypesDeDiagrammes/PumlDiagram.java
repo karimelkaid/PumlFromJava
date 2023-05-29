@@ -1,9 +1,6 @@
-package pumlFromJava;
+package pumlFromJava.TypesDeDiagrammes;
 
 import jdk.javadoc.doclet.DocletEnvironment;
-import pumlFromJava.ElementsClasse.PumlAttribut;
-import pumlFromJava.ElementsClasse.PumlTypeClasse;
-import pumlFromJava.Relations.PumlRelation;
 
 import javax.lang.model.element.Element;
 import java.io.FileWriter;
@@ -61,7 +58,6 @@ public class PumlDiagram
             FileWriter fw = new FileWriter(filePath);
 
             // Remplissage du code PUML à mettre plus tard dans le fichier PUML
-            //String chPuml = ecrisCodePuml(Classes);
 
             // Écriture dans le fichier PUML et fermeture du flux
             fw.write(code);
@@ -73,26 +69,6 @@ public class PumlDiagram
             e.printStackTrace();
         }
 
-        /*List<Element> Classes = recupClasses(environment);
-
-        try
-        {
-            // Création du fichier puml au bon emplacement
-            String filePath = repertoireDestination +"/"+ nomFichierACree;
-            FileWriter fw = new FileWriter(filePath);
-
-            // Remplissage du code PUML à mettre plus tard dans le fichier PUML
-            String chPuml = ecrisCodePuml(Classes);
-
-            // Écriture dans le fichier PUML et fermeture du flux
-            fw.write(chPuml);
-            fw.flush();
-            fw.close();
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }*/
 
     }
 
@@ -121,32 +97,4 @@ public class PumlDiagram
         return res;
     }
 
-    public String ecrisCodePuml(List<Element> classes)
-    {
-        StringBuilder res = new StringBuilder("@startuml\n\n");
-
-        PumlPackage pumlPackage = new PumlPackage(environment);
-        res = pumlPackage.ajoutePackage(res);
-
-        for( Element classe : classes )
-        {
-            PumlTypeClasse pumlTypeClasse = new PumlTypeClasse(classe);
-            PumlAttribut pumlChamps = new PumlAttribut(classe);
-            PumlRelation pumlRelation = new PumlRelation(classe);
-
-            res = pumlTypeClasse.ajouteTypeClasse(res);
-            res = pumlRelation.ajouteSuperClass(res);
-            res = pumlRelation.ajouteImplementations(res);
-            res.append("{\n");
-            res = pumlChamps.ajouteChampsDCA(res);
-            res.append("}\n");
-
-            res = pumlRelation.ajouteAgregations(res);
-
-            res.append("\n\n");
-        }
-        res.append("}\n@enduml\n");
-
-        return res.toString();
-    }
 }

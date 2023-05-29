@@ -4,6 +4,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
 
@@ -155,37 +158,6 @@ public class PumlAttribut
         return res;
     }
 
-    public List<String> getPrimitiveFieldsNamesAndConstEnum_V2()
-    {
-        List<String> variableNames = new ArrayList<>();
-
-        if(classe.getKind().equals(ElementKind.ENUM))   // Si la classe est une énumération
-        {
-            for ( Element variable_local : classe.getEnclosedElements())
-            {
-                // Si le champ est une constante d'énumération --> ajout à la liste
-                if (variable_local.getKind().equals(ElementKind.ENUM_CONSTANT))
-                {
-                    //variableNames.add(variable_local.getSimpleName().toString());
-                }
-            }
-        }
-        else
-        {
-            for ( Element variable_local : classe.getEnclosedElements())
-            {
-                // Si le champ que l'on étudie est un champ ET est de type primitif --> ajout à la liste
-                if (variable_local.getKind().equals(ElementKind.FIELD) && variable_local.asType().getKind().isPrimitive())
-                {
-                    variableNames.add(variable_local.getSimpleName().toString());
-                }
-            }
-        }
-
-
-        return variableNames;
-    }
-
     public String getVisibiliteAttribut(Element attribut)
     {
 
@@ -194,7 +166,7 @@ public class PumlAttribut
         Set<Modifier> modifiers = attribut.getModifiers();
         //System.out.println("Nombre de modifiers de "+attribut.getSimpleName()+" = "+modifiers.size());
 
-        for( Modifier m : attribut.getModifiers() )
+        for( Modifier m : modifiers )
         {
             if( m.equals(Modifier.PRIVATE) )
             {
@@ -272,13 +244,9 @@ public class PumlAttribut
         {
             res = premiereLettreEnMajuscule(typeAttribut.toString());
         }
-        //res = typeAttribut.toString();
-        //res = premiereLettreEnMajuscule(res);
-
-
-        //System.out.println("Type de l'atrribut : "+res);
         return res;
     }
+
 
     public boolean estReel( String type )
     {

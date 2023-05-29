@@ -3,6 +3,7 @@ package pumlFromJava;
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
+import pumlFromJava.TypesDeDiagrammes.PumlDiagram;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;

@@ -1,0 +1,163 @@
+@startuml
+
+package [western]{
+	class Boisson{
++ <<Create>> Boisson(nom:String, genre:Genre)
++  getNom() : String
++  getGenre() : Genre
++  getNomAvecArticleIndefini() : String
++  getNomAvecArticlePartitif() : String
++  getNomAvecArticleDefini() : String
++  getNomAvecPreposition(preposition:String) : String
+}
+
+
+class Brigand{
+	-  recompense : Integer 
+	-  estLibre : Boolean 
++ <<Create>> Brigand(nom:String)
++ <<Create>> Brigand(nom:String, boisson:Boisson)
++ <<Create>> Brigand(nom:String, boisson:Boisson, look:String)
++  getLook() : String
++  getRecompense() : Integer
++  estLibre() : Boolean
++  kidnapper(dame:Dame)
++  seFaireCapturer(cowBoy:Cowboy)
++  seFaireTirerDessus(cowBoy:Cowboy)
++  getPseudo() : String
++  getCaptives() : Dame[*]
++  sePresenter()
++ {static} getBoissonParDefaut() : Boisson
++ {static} setBoissonParDefaut(boisson:Boisson)
+}
+
+
+class Cowboy{
+	-  gains : Integer 
++ <<Create>> Cowboy(nom:String)
++ <<Create>> Cowboy(nom:String, boisson:Boisson)
++  getPseudo() : String
++  liberer(dame:Dame)
++  liberer(captives:Dame[*])
++  capturer(horsLaLoi:HorsLaLoi)
++  tirerSur(brigand:HorsLaLoi)
++  sePresenter()
++ {static} getBoissonParDefaut() : Boisson
++ {static} setBoissonParDefaut(boisson:Boisson)
+}
+
+
+class Dame{
+	-  estLibre : Boolean 
++ <<Create>> Dame(nom:String)
++ <<Create>> Dame(nom:String, boisson:Boisson)
++  getPseudo() : String
++  seFaireKidnapper(horsLaLoi:HorsLaLoi)
++  seFaireLiberer(cowBoy:Cowboy)
++  estLibre() : Boolean
++  sePresenter()
++ {static} getBoissonParDefaut() : Boisson
++ {static} setBoissonParDefaut(boisson:Boisson)
++  getRavisseur() : HorsLaLoi
+}
+
+
+enum Genre <<enum>>{
+	FEMININ
+	MASCULIN
+}
+
+
+class Histoire2{
++ <<Create>> Histoire2()
++ {static} main(args:String[])
+}
+
+
+class Histoire4{
++ <<Create>> Histoire4()
++ {static} main(args:String[])
+}
+
+
+interface HorsLaLoi <<interface>>{
++  estLibre() : Boolean
++  getRecompense() : Integer
++  kidnapper(dame:Dame)
++  seFaireCapturer(cowBoy:Cowboy)
++  seFaireTirerDessus(cowBoy:Cowboy)
++  getLook() : String
++  getCaptives() : Dame[*]
+}
+
+
+class Narrateur{
++ <<Create>> Narrateur()
++ <<Create>> Narrateur(nom:String)
++  dire(texte:String)
++  boire(boisson:Boisson)
++  boire()
++  getPseudo() : String
+}
+
+
+interface Nommable <<interface>>{
++  getNom() : String
++  getPseudo() : String
+}
+
+
+class Personnage{
++ <<Create>> Personnage(nom:String)
++ <<Create>> Personnage(nom:String, boisson:Boisson)
++  dire(texte:String)
++  sePresenter()
++  boire(boisson:Boisson)
++  boire()
++  getNom() : String
++  getBoisson() : Boisson
++ {static} getPseudos(personnages:Nommable[*]) : String
++ {static} getBoissonParDefaut() : Boisson
+}
+
+
+class Ripou{
++ <<Create>> Ripou(nom:String)
++ <<Create>> Ripou(nom:String, boisson:Boisson)
++ <<Create>> Ripou(nom:String, boisson:Boisson, look:String)
++  getLook() : String
++  estLibre() : Boolean
++  getRecompense() : Integer
++  kidnapper(dame:Dame)
++  getCaptives() : Dame[*]
++  seFaireCapturer(cowBoy:Cowboy)
++  seFaireTirerDessus(cowBoy:Cowboy)
++  getPseudo() : String
++  sePresenter()
++  liberer(dame:Dame)
+}
+
+
+class Substantif{
++ <<Create>> Substantif(nom:String, genre:Genre)
++  getNom() : String
++  getGenre() : Genre
++  toString() : String
++ {static} isVowel(c:Integer) : Boolean
++ {static} startsWithVowel(s:String) : Boolean
++  getArticleIndefini() : String
++  avecArticleIndefini() : String
++ {static} getArticleDefini(genre:Genre) : String
++  getArticleDefini() : String
++  avecArticleDefini() : String
++ {static} faireElision(article:String) : String
++  elision() : Boolean
++  getArticlePartitif() : String
++  avecArticlePartitif() : String
++  avecElision(article:String) : String
++  avecPreposition(preposition:String) : String
+}
+
+
+}
+@enduml
