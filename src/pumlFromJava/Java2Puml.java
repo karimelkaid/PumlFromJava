@@ -21,8 +21,8 @@ public class Java2Puml
 
     public static void main(String[] args)
     {
-        String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","western", "-d", "uml" } ;
-        //String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","pumlFromJava.ElementsClasse", "-d", "uml" } ;
+        //String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","western", "-d", "uml" } ;
+        String[] arguments = {"-private","-sourcepath", "./src","-doclet" ,"pumlFromJava.PumlDoclet","-docletpath" ,"","pumlFromJava.TypesDeDiagrammes", "-d", "uml" } ;
 
         ToolProvider toolProvider = ToolProvider.findFirst("javadoc").get();
         System.out.println(toolProvider.name());

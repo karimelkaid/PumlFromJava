@@ -1,5 +1,126 @@
-@startuml
+/home/kelkaid/Bureau/Modules_BUT_v2/BUT_S2/les_SAE/SAE_P21/Semaine_4/p21_projet@startuml
 'https://plantuml.com/class-diagram
+
+package ElementsClasse
+{
+    class PumlMethode{
+        + <<Create>> PumlMethode(classe:Element)
+        +  getTypeSimplifie(typeMirror:TypeMirror) : String
+        +  obtenirNomSimple(typeMirror:TypeMirror) : String
+        +  estListe(typeMirror:TypeMirror) : Boolean
+        +  estReel(type:String) : Boolean
+        +  premiereLettreEnMajuscule(chaine:String) : String
+        +  ajouteMethodes(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getVisibilite(methode:ExecutableElement) : String
+        +  getStatic(methode:ExecutableElement) : String
+        +  getParametres(methode:ExecutableElement) : String
+        +  getMethodes() : ExecutableElement[*]
+    }
+
+
+
+    class PumlPackage
+    {
+        + <<Create>> PumlPackage(environnement:DocletEnvironment)
+        +  ajoutePackage(codePumlDeBase:StringBuilder) : StringBuilder
+    }
+
+
+
+    class PumlConstructeur{
+        + <<Create>> PumlConstructeur(classe:Element)
+        +  getTypeSimplifie(typeMirror:TypeMirror) : String
+        +  obtenirNomSimple(typeMirror:TypeMirror) : String
+        +  estListe(typeMirror:TypeMirror) : Boolean
+        +  estReel(type:String) : Boolean
+        +  premiereLettreEnMajuscule(chaine:String) : String
+        +  ajouteConstructeurs(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getConstructeurs() : ExecutableElement[*]
+        +  getVisibilite(methode:ExecutableElement) : String
+        +  getParametres(methode:ExecutableElement) : String
+    }
+
+
+    class PumlTypeClasse{
+        + <<Create>> PumlTypeClasse(classe:Element)
+        +  ajouteTypeClasse(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getTypeClasse() : String
+    }
+
+
+    class PumlAttribut{
+        + <<Create>> PumlAttribut(classe:Element)
+        +  ajouteChampsDCA(codePumlDeBase:StringBuilder) : StringBuilder
+        +  ajouteChampsDCC(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getPrimitiveFieldsNamesAndConstEnum() : String[*]
+        +  getAttributs() : VariableElement[*]
+        +  getVisibiliteAttribut(attribut:Element) : String
+        +  getAttributStaticFinal(attribut:Element) : String>
+        +  getTypeAttribut(attribut:VariableElement) : String
+        +  estReel(type:String) : Boolean
+        +  premiereLettreEnMajuscule(chaine:String) : String
+    }
+
+}
+
+package Relations
+{
+    class PumlImplementation{
+        + <<Create>> PumlImplementation(classe:Element, typeClasse:String)
+        +  ajouteImplementations(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getInterfaces() : String[*]
+    }
+
+
+    class PumlRelation{
+        + <<Create>> PumlRelation(classe:Element)
+        +  ajouteAgregations(codePumlDeBase:StringBuilder) : StringBuilder
+        +  ajouteSuperClass(codePumlDeBase:StringBuilder) : StringBuilder
+        +  ajouteImplementations(codePumlDeBase:StringBuilder) : StringBuilder
+    }
+
+    class PumlSuperClass{
+        + <<Create>> PumlSuperClass(classe:Element)
+        +  ajouteSuperClass(codePumlDeBase:StringBuilder) : StringBuilder
+        +  getSuperClassName() : String
+    }
+
+
+    class PumlAgregation{
+        + <<Create>> PumlAgregation(classe:Element)
+        +  ajouteAgregations(codePumlDeBase:StringBuilder) : StringBuilder
+        +  liaisonExistante(agregationsExistantes:String[*], liaison:String) : Boolean
+        +  inverseLiaison(liaison:String) : String
+    }
+
+}
+
+package TypesDeDiagrammes
+{
+    class PumlDiagram
+    {
+    	-  dca : Boolean
+        + <<Create>> PumlDiagram(repertoireDestination:String, nomFichierACree:String, environment:DocletEnvironment, dca:Boolean)
+        +  generePuml()
+        +  recupClasses(environment:DocletEnvironment) : Element[*]
+    }
+
+
+    class PumlDCC{
+        + <<Create>> PumlDCC(environment:DocletEnvironment, Classes:Element[*])
+        +  genereDCC() : String
+        +  ecrisCodeDCC(classes:Element[*]) : String
+    }
+
+
+    class PumlDCA
+    {
+        + <<Create>> PumlDCA(environment:DocletEnvironment, Classes:Element[*])
+        +  genereDCA() : String
+        +  ecrisCodeDCA(classes:Element[*]) : String
+    }
+
+}
 
 class PumlDoclet
 {
@@ -20,28 +141,8 @@ class Java2Puml
     + {static} main(String[]:args)
 }
 
-class PumlDiagram
+class TypeMirror
 {
-    - repertoireDestination : String
-    - nomFichierACree : String
-    - environment : DocletEnvironment
-
-    + <<Create>> PumlDiagram(repertoireDestination : String, nomFichierACree : String, environment : DocletEnvironment)
-    + getRepertoireDestination() : String
-    + getNomFichierACreer() : String
-    + getEnvironment() : DocletEnvironment
-
-    + generePuml()
-    + recupClasses(environment : DocletEnvironment) : Element[*]
-    + ecrisCodePuml(classes : Element[*]) : String
-    + getStereotype(classe : Element) : String
-    + getPrimitiveFieldsNamesAndConstEnum(classe : Element) : String[*]
-    + ajouteTypeElement(codePumlDeBase : String, classe : Element) : StringBuilder
-    + ajouteChamps(codePumlDeBase : StringBuilder, classe : Element) : StringBuilder
-
-    'Ajout de méthodes'
-    + ajouteAgregations(res : String, classe : Element) : StringBuilder
-    + liaisonExistante(agregationsExistantes : String[*], liaison : String) : Boolean
 
 }
 
@@ -115,6 +216,7 @@ docletOptionKind <.. docletOption : <<use>>
 PumlDoclet ...|> Doclet
 Java2Puml " 1\t" -- "1\ndoclet" PumlDoclet : appelle >
 PumlDoclet  " 1" ...> "1\ndiagrammeUML" PumlDiagram : <<instanciate>>
+
 PumlDiagram ..> Element : <<use>>
 
 
@@ -160,5 +262,49 @@ class DocTrees extends Trees
     + getDocTreeFactory() : DocTreeFactory
     + getCharacters(tree : EntityTree) : String
 }
+        PumlTypeClasse ..> Element : <<use>>
+    PumlAttribut ..> Element : <<use>>
+    PumlAttribut ..> VariableElement : <<use>>
+
+
+    PumlConstructeur ..> Element : <<use>>
+    PumlConstructeur ..> TypeMirror : <<use>>
+    PumlConstructeur ..> ExecutableElement : <<use>>
+
+PumlMethode ..> Element : <<use>>
+PumlMethode ..> TypeMirror : <<use>>
+PumlMethode ..> ExecutableElement : <<use>>
+
+PumlDiagram ..> PumlDCA : <<instanciate>>
+PumlDiagram ..> PumlDCC : <<instanciate>>
+
+PumlRelation ..> PumlAgregation : <<instanciate>>
+PumlRelation ..> PumlImplementation : <<instanciate>>
+PumlRelation ..> PumlSuperClass : <<instanciate>>
+
+PumlImplementation ..> Element : <<use>>
+PumlRelation ..> Element : <<use>>
+PumlSuperClass ..> Element : <<use>>
+PumlAgregation ..> Element : <<use>>
+
+PumlDiagram ..> DocletEnvironment : <<use>>
+PumlDCC ..> Element : <<use>>
+PumlDCC ..> DocletEnvironment : <<use>>
+PumlDCA ..> Element : <<use>>
+PumlDCA ..> DocletEnvironment : <<use>>
+
+PumlDCA ..> PumlAttribut : <<instanciate>>
+PumlDCA ..> PumlConstructeur : <<instanciate>>
+PumlDCA ..> PumlMethode : <<instanciate>>
+PumlDCA ..> PumlPackage : <<instanciate>>
+PumlDCA ..> PumlTypeClasse : <<instanciate>>
+
+PumlDCC ..> PumlAttribut : <<instanciate>>
+PumlDCC ..> PumlConstructeur : <<instanciate>>
+PumlDCC ..> PumlMethode : <<instanciate>>
+PumlDCC ..> PumlPackage : <<instanciate>>
+PumlDCC ..> PumlTypeClasse : <<instanciate>>
+
+
 
 @enduml
