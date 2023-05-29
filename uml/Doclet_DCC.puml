@@ -6,7 +6,7 @@ package ElementsClasse
     class PumlMethode{
         + <<Create>> PumlMethode(classe:Element)
         +  getTypeSimplifie(typeMirror:TypeMirror) : String
-        +  obtenirNomSimple(typeMirror:TypeMirror) : String
+        +  getNomSimple(typeMirror:TypeMirror) : String
         +  estListe(typeMirror:TypeMirror) : Boolean
         +  estReel(type:String) : Boolean
         +  premiereLettreEnMajuscule(chaine:String) : String
@@ -30,7 +30,7 @@ package ElementsClasse
     class PumlConstructeur{
         + <<Create>> PumlConstructeur(classe:Element)
         +  getTypeSimplifie(typeMirror:TypeMirror) : String
-        +  obtenirNomSimple(typeMirror:TypeMirror) : String
+        +  getNomSimple(typeMirror:TypeMirror) : String
         +  estListe(typeMirror:TypeMirror) : Boolean
         +  estReel(type:String) : Boolean
         +  premiereLettreEnMajuscule(chaine:String) : String

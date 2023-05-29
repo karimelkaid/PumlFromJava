@@ -46,7 +46,7 @@ public class PumlConstructeur{
         {
             ArrayType arrayType = (ArrayType) typeMirror;
             TypeMirror typeElementDansTableau = arrayType.getComponentType();
-            String nomTypeElementDansTableau = obtenirNomSimple(typeElementDansTableau);
+            String nomTypeElementDansTableau = getNomSimple(typeElementDansTableau);
             res = nomTypeElementDansTableau + "[]";
         }
         else if (estListe(typeMirror))
@@ -56,19 +56,19 @@ public class PumlConstructeur{
             if (!typeArguments.isEmpty())
             {
                 TypeMirror typeElement = typeArguments.get(0);
-                String nomTypeElement = obtenirNomSimple(typeElement);
+                String nomTypeElement = getNomSimple(typeElement);
                 res = nomTypeElement + "[*]";
             }
         }
         else
         {
-            res = obtenirNomSimple(typeMirror);
+            res = getNomSimple(typeMirror);
         }
 
         return res;
     }
 
-    public String obtenirNomSimple(TypeMirror typeMirror) {
+    public String getNomSimple(TypeMirror typeMirror) {
         // Nous n'utilisons pas la classe DeclaredType car le getSimpleName() ne fonctionne pas pour es type comme "? extens Nommable"
 
         // Obtenir le nom complet du type (par exemple "java.lang.String")

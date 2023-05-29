@@ -1,30 +1,228 @@
-@startuml
+/home/kelkaid/Bureau/Modules_BUT_v2/BUT_S2/les_SAE/SAE_P21/Semaine_4/p21_projet@startuml
 'https://plantuml.com/class-diagram
 
+package ElementsClasse
+{
+    class PumlMethode{
+    }
+
+
+
+    class PumlPackage
+    {
+    }
+
+
+
+    class PumlConstructeur{
+
+    }
+
+
+    class PumlTypeClasse{
+
+    }
+
+
+    class PumlAttribut{
+
+    }
+
+}
+
+package Relations
+{
+    class PumlImplementation{
+
+    }
+
+
+    class PumlRelation{
+
+    }
+
+    class PumlSuperClass{
+
+    }
+
+
+    class PumlAgregation{
+
+    }
+
+}
+
+package TypesDeDiagrammes
+{
+    class PumlDiagram
+    {
+
+    }
+
+
+    class PumlDCC{
+
+    }
+
+
+    class PumlDCA
+    {
+
+    }
+
+}
+
 class PumlDoclet
+{
+
+}
 class ToolProvider
+{
+}
 
 
 class Java2Puml
+{
+}
 
-class PumlDiagram
+class TypeMirror
+{
+
+}
 
 interface Doclet <<interface>>
-interface "Doclet.Option" as docletOption <<interface>>
-enum "Doclet.Option.Kind" as docletOptionKind <<enum>>
+{
 
-interface DocletEnvironnement <<interface>>
+}
+interface "Doclet.Option" as docletOption <<interface>>
+{
+
+}
+
+enum "Doclet.Option.Kind" as docletOptionKind <<enum>>
+{
+    EXTENDED
+    STANDARD
+    OTHER
+}
+
+interface DocletEnvironment <<interface>>
+{
+
+}
+enum "DocletEnvironment.ModuleMode" as ModuleMode <<enum>>
+{
+    API
+    ALL
+}
+DocletEnvironment ..> ModuleMode : <<use>>
+
+interface Element
+{
+
+}
+
+class Locale implements Cloneable, Serializable
+interface Reporter <<interface>>
+Doclet ..> Locale : <<use>>
+Doclet ..> Reporter : <<use>>
+
 
 Java2Puml ..> ToolProvider : <<instanciate>>
 
-PumlDoclet ..> DocletEnvironnement : <<use>>
-Doclet ..> DocletEnvironnement : <<use>>
+PumlDiagram ..> DocletEnvironment : <<use>>
+Doclet ..> DocletEnvironment : <<use>>
 docletOption <.. Doclet : <<use>>
 docletOptionKind <.. docletOption : <<use>>
 
 PumlDoclet ...|> Doclet
 Java2Puml " 1\t" -- "1\ndoclet" PumlDoclet : appelle >
 PumlDoclet  " 1" ...> "1\ndiagrammeUML" PumlDiagram : <<instanciate>>
+
+PumlDiagram ..> Element : <<use>>
+
+
+enum ElementKind
+{
+    ANNOTATION_TYPE
+    CLASS
+    CONSTRUCTOR
+    ENUM
+    ENUM_CONSTANT
+    EXCEPTION_PARAMETER
+    FIELD
+    INSTANCE_INIT
+    INTERFACE
+    LOCAL_VARIABLE
+    METHOD
+    MODULE
+    OTHER
+    PACKAGE
+    PARAMETER
+    RESSOURCE_VARIABLE
+    STATIC_INIT
+    TYPE_PARAMETER
+}
+
+class DocTrees extends Trees
+{
+    + <<Create>> DocTrees()
+
+    + getBreakIterator() : BreakIterator
+    + getDocCommentTree(path : TreePath) : DocCommentTree
+    + getDocCommentTree(e : Element) : DocCommentTree
+    + getDocCommentTree(fileObject : FileObject) : DocCommentTree
+
+    + getDocTreePath(fileObject : FileObject, packageElement : PackageElement) : DocTreePath
+    + getElement(path : DocTreePath) : Element
+    + getType(path : DocTreePath) : TypeMirror
+    + getFirstSentence(list : DocTree[*]) : DocTree[*]
+    + getSourcePositions() : DocSourcePositions
+    + getDocTreeFactory() : DocTreeFactory
+    + getCharacters(tree : EntityTree) : String
+}
+        PumlTypeClasse ..> Element : <<use>>
+    PumlAttribut ..> Element : <<use>>
+    PumlAttribut ..> VariableElement : <<use>>
+
+
+    PumlConstructeur ..> Element : <<use>>
+    PumlConstructeur ..> TypeMirror : <<use>>
+    PumlConstructeur ..> ExecutableElement : <<use>>
+
+PumlMethode ..> Element : <<use>>
+PumlMethode ..> TypeMirror : <<use>>
+PumlMethode ..> ExecutableElement : <<use>>
+
+PumlDiagram ..> PumlDCA : <<instanciate>>
+PumlDiagram ..> PumlDCC : <<instanciate>>
+
+PumlRelation ..> PumlAgregation : <<instanciate>>
+PumlRelation ..> PumlImplementation : <<instanciate>>
+PumlRelation ..> PumlSuperClass : <<instanciate>>
+
+PumlImplementation ..> Element : <<use>>
+PumlRelation ..> Element : <<use>>
+PumlSuperClass ..> Element : <<use>>
+PumlAgregation ..> Element : <<use>>
+
+PumlDiagram ..> DocletEnvironment : <<use>>
+PumlDCC ..> Element : <<use>>
+PumlDCC ..> DocletEnvironment : <<use>>
+PumlDCA ..> Element : <<use>>
+PumlDCA ..> DocletEnvironment : <<use>>
+
+PumlDCA ..> PumlAttribut : <<instanciate>>
+PumlDCA ..> PumlConstructeur : <<instanciate>>
+PumlDCA ..> PumlMethode : <<instanciate>>
+PumlDCA ..> PumlPackage : <<instanciate>>
+PumlDCA ..> PumlTypeClasse : <<instanciate>>
+
+PumlDCC ..> PumlAttribut : <<instanciate>>
+PumlDCC ..> PumlConstructeur : <<instanciate>>
+PumlDCC ..> PumlMethode : <<instanciate>>
+PumlDCC ..> PumlPackage : <<instanciate>>
+PumlDCC ..> PumlTypeClasse : <<instanciate>>
 
 
 
