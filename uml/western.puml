@@ -1,7 +1,19 @@
 @startuml
 
 package [western]{
-	class Boisson{
+	class Histoire4{
++ <<Create>> Histoire4()
++ {static} main(args:String[])
+}
+
+
+class Histoire2{
++ <<Create>> Histoire2()
++ {static} main(args:String[])
+}
+
+
+class Boisson{
 + <<Create>> Boisson(nom:String, genre:Genre)
 +  getNom() : String
 +  getGenre() : Genre
@@ -9,6 +21,35 @@ package [western]{
 +  getNomAvecArticlePartitif() : String
 +  getNomAvecArticleDefini() : String
 +  getNomAvecPreposition(preposition:String) : String
+}
+
+
+class Personnage{
++ <<Create>> Personnage(nom:String)
++ <<Create>> Personnage(nom:String, boisson:Boisson)
++  dire(texte:String)
++  sePresenter()
++  boire(boisson:Boisson)
++  boire()
++  getNom() : String
++  getBoisson() : Boisson
++ {static} getPseudos(personnages:Nommable[*]) : String
++ {static} getBoissonParDefaut() : Boisson
+}
+
+
+class Dame{
+	-  estLibre : Boolean 
++ <<Create>> Dame(nom:String)
++ <<Create>> Dame(nom:String, boisson:Boisson)
++  getPseudo() : String
++  seFaireKidnapper(horsLaLoi:HorsLaLoi)
++  seFaireLiberer(cowBoy:Cowboy)
++  estLibre() : Boolean
++  sePresenter()
++ {static} getBoissonParDefaut() : Boisson
++ {static} setBoissonParDefaut(boisson:Boisson)
++  getRavisseur() : HorsLaLoi
 }
 
 
@@ -32,95 +73,6 @@ class Brigand{
 }
 
 
-class Cowboy{
-	-  gains : Integer 
-+ <<Create>> Cowboy(nom:String)
-+ <<Create>> Cowboy(nom:String, boisson:Boisson)
-+  getPseudo() : String
-+  liberer(dame:Dame)
-+  liberer(captives:Dame[*])
-+  capturer(horsLaLoi:HorsLaLoi)
-+  tirerSur(brigand:HorsLaLoi)
-+  sePresenter()
-+ {static} getBoissonParDefaut() : Boisson
-+ {static} setBoissonParDefaut(boisson:Boisson)
-}
-
-
-class Dame{
-	-  estLibre : Boolean 
-+ <<Create>> Dame(nom:String)
-+ <<Create>> Dame(nom:String, boisson:Boisson)
-+  getPseudo() : String
-+  seFaireKidnapper(horsLaLoi:HorsLaLoi)
-+  seFaireLiberer(cowBoy:Cowboy)
-+  estLibre() : Boolean
-+  sePresenter()
-+ {static} getBoissonParDefaut() : Boisson
-+ {static} setBoissonParDefaut(boisson:Boisson)
-+  getRavisseur() : HorsLaLoi
-}
-
-
-enum Genre <<enum>>{
-	FEMININ
-	MASCULIN
-}
-
-
-class Histoire2{
-+ <<Create>> Histoire2()
-+ {static} main(args:String[])
-}
-
-
-class Histoire4{
-+ <<Create>> Histoire4()
-+ {static} main(args:String[])
-}
-
-
-interface HorsLaLoi <<interface>>{
-+  estLibre() : Boolean
-+  getRecompense() : Integer
-+  kidnapper(dame:Dame)
-+  seFaireCapturer(cowBoy:Cowboy)
-+  seFaireTirerDessus(cowBoy:Cowboy)
-+  getLook() : String
-+  getCaptives() : Dame[*]
-}
-
-
-class Narrateur{
-+ <<Create>> Narrateur()
-+ <<Create>> Narrateur(nom:String)
-+  dire(texte:String)
-+  boire(boisson:Boisson)
-+  boire()
-+  getPseudo() : String
-}
-
-
-interface Nommable <<interface>>{
-+  getNom() : String
-+  getPseudo() : String
-}
-
-
-class Personnage{
-+ <<Create>> Personnage(nom:String)
-+ <<Create>> Personnage(nom:String, boisson:Boisson)
-+  dire(texte:String)
-+  sePresenter()
-+  boire(boisson:Boisson)
-+  boire()
-+  getNom() : String
-+  getBoisson() : Boisson
-+ {static} getPseudos(personnages:Nommable[*]) : String
-+ {static} getBoissonParDefaut() : Boisson
-}
-
-
 class Ripou{
 + <<Create>> Ripou(nom:String)
 + <<Create>> Ripou(nom:String, boisson:Boisson)
@@ -135,6 +87,44 @@ class Ripou{
 +  getPseudo() : String
 +  sePresenter()
 +  liberer(dame:Dame)
+}
+
+
+interface HorsLaLoi <<interface>>{
++  estLibre() : Boolean
++  getRecompense() : Integer
++  kidnapper(dame:Dame)
++  seFaireCapturer(cowBoy:Cowboy)
++  seFaireTirerDessus(cowBoy:Cowboy)
++  getLook() : String
++  getCaptives() : Dame[*]
+}
+
+
+enum Genre <<enum>>{
+	FEMININ
+	MASCULIN
+}
+
+
+interface Nommable <<interface>>{
++  getNom() : String
++  getPseudo() : String
+}
+
+
+class Cowboy{
+	-  gains : Integer 
++ <<Create>> Cowboy(nom:String)
++ <<Create>> Cowboy(nom:String, boisson:Boisson)
++  getPseudo() : String
++  liberer(dame:Dame)
++  liberer(captives:Dame[*])
++  capturer(horsLaLoi:HorsLaLoi)
++  tirerSur(brigand:HorsLaLoi)
++  sePresenter()
++ {static} getBoissonParDefaut() : Boisson
++ {static} setBoissonParDefaut(boisson:Boisson)
 }
 
 
@@ -156,6 +146,16 @@ class Substantif{
 +  avecArticlePartitif() : String
 +  avecElision(article:String) : String
 +  avecPreposition(preposition:String) : String
+}
+
+
+class Narrateur{
++ <<Create>> Narrateur()
++ <<Create>> Narrateur(nom:String)
++  dire(texte:String)
++  boire(boisson:Boisson)
++  boire()
++  getPseudo() : String
 }
 
 

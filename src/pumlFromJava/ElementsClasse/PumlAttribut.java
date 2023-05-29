@@ -76,7 +76,6 @@ public class PumlAttribut
                     {
                         attributFinal = attributStaticFinal.get(cle);
                     }
-                    //System.out.println("Clé : " + cle + ", Valeur : " + valeur);
                 }
 
                 typeAttribut = getTypeAttribut(attribut);
@@ -89,8 +88,6 @@ public class PumlAttribut
         for( String champ : champs )
         {
             res.append("\t"+champ+"\n");
-
-            System.out.println("oe : "+champ);
         }
 
         return res;

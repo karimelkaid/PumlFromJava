@@ -145,7 +145,6 @@ public class PumlConstructeur{
 
         }
 
-        System.out.println(codePumlConstructeur);
         return codePumlConstructeur;
     }
 
