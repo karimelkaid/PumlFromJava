@@ -3,28 +3,32 @@ package pumlFromJava.Relations;
 import pumlFromJava.ElementsClasse.PumlTypeClasse;
 
 import javax.lang.model.element.Element;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PumlRelation
 {
     Element classe;
+    List<Element> lesClasses;
     String typeClasse;
     PumlAgregation pumlAgregation;
     PumlSuperClass pumlSuperClass;
     PumlImplementation pumlImplementation;
 
-    public PumlRelation(Element classe)
+    public PumlRelation(Element classe, List<Element> lesClasses)
     {
         this.classe = classe;
 
         PumlTypeClasse pumlTypeClasse= new PumlTypeClasse(classe);
         this.typeClasse = pumlTypeClasse.getTypeClasse();
+        this.lesClasses = new ArrayList<>(lesClasses);
     }
 
     public StringBuilder ajouteAgregations(StringBuilder codePumlDeBase)
     {
         StringBuilder res;
 
-        pumlAgregation = new PumlAgregation(classe);
+        pumlAgregation = new PumlAgregation(classe, lesClasses);
         res = pumlAgregation.ajouteAgregations(codePumlDeBase);
 
         return res;

@@ -1,7 +1,14 @@
 package western;
 
+import java.util.*;
+
 public class Boisson
 {
+    private String[] testTabString = new String[5];
+    private HorsLaLoi[] testTabHorsLaLoi = new HorsLaLoi[5];
+    private List<Dame> testList = new ArrayList<>();
+    private Set<Brigand> testSet = new HashSet<>();
+    private Map<String, Cowboy> testMap = new HashMap<>();
     private final Substantif substantif;
 
     public static final Boisson EAU = new Boisson("eau", Genre.FEMININ);

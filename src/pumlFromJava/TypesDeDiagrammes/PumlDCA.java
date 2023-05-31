@@ -38,7 +38,7 @@ public class PumlDCA
         {
             PumlTypeClasse pumlTypeClasse = new PumlTypeClasse(classe);
             PumlAttribut pumlChamps = new PumlAttribut(classe);
-            PumlRelation pumlRelation = new PumlRelation(classe);
+            PumlRelation pumlRelation = new PumlRelation(classe, Classes);
 
             res = pumlTypeClasse.ajouteTypeClasse(res);
             res = pumlRelation.ajouteSuperClass(res);
