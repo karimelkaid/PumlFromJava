@@ -1,7 +1,5 @@
 package pumlFromJava.Relations;
 
-import jdk.javadoc.doclet.DocletEnvironment;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
@@ -21,7 +19,7 @@ public class PumlAgregation
     Element classe;
     List<String> agregationsExistantes;        // Nous stockons toutes les agrégations dans cette liste afin de ne pas avoir de répétitions (par exemple : Boisson -- Substantif et Substantif -- Boisson)
     List<String> typeNonVoulu;
-    List<String> typeVoulu;
+    List<String> classesPackage;
 
 
     public PumlAgregation(Element classe, List<Element> lesClasses)
@@ -29,11 +27,11 @@ public class PumlAgregation
         this.classe = classe;
         this.agregationsExistantes = new ArrayList<>();
         this.typeNonVoulu = Arrays.asList("String", "String[]",  "Set", "List");     // Les String, Set et List ne sont pas considérés comme des types primitifs, mais nous ne les voulons pas dans l'UML
-        this.typeVoulu = new ArrayList<>();
+        this.classesPackage = new ArrayList<>();
 
         for( Element classe_ : lesClasses )
         {
-            typeVoulu.add( classe_.getSimpleName().toString() );
+            classesPackage.add( classe_.getSimpleName().toString() );
         }
     }
 
@@ -174,64 +172,29 @@ public class PumlAgregation
                     //if( !typeNonVoulu.contains(typeChampString)  )
                     {
 
-                        if( typeVoulu.contains(typeChampString) )
+                        if( classesPackage.contains(typeChampString) )
                         {
-
                             multiplicite = "1";
                         }
                         else if( estTableau(champOuConstructeurOuMethode) )
                         {
                             // Si je veux ne pas avoir à utiliser la fonction getNomSimplifie_v2 à chaque fois --> dans la liste typeVoulu qui contient les classes du package je mets les classes cache sans utiliser la fonction getNomSimplifie_v2
-                            /*String typeDansTab = getNomSimplifie_v2(((ArrayType)typeChamp).getComponentType().toString());
-                            if( typeVoulu.contains( typeDansTab ))
+                            String typeDansTab = getNomSimplifie_v2(((ArrayType)typeChamp).getComponentType().toString());
+                            if( classesPackage.contains( typeDansTab ))
                             {
-                                int tailleTab = Array.getLength(  champOuConstructeurOuMethode);
+                                ArrayType arrayType = (ArrayType) typeChamp;
+                                int tailleTab = arrayType.getLength();
                                 multiplicite = "0.."+tailleTab;
-                            }*/
-
-                            Element tableauElement = champOuConstructeurOuMethode;
-                            if (tableauElement instanceof VariableElement)
-                            {
-                                VariableElement variableElement = (VariableElement) tableauElement;
-                                TypeMirror typeAttribut = variableElement.asType();
-                                if (typeAttribut instanceof ArrayType)
-                                {
-                                    ArrayType arrayType = (ArrayType) typeAttribut;
-                                    TypeMirror componentType = arrayType.getComponentType();
-                                    // Maintenant, vous pouvez utiliser le type de tableau et le composant
-                                    // pour effectuer des opérations supplémentaires
-                                    // ...
-                                    if( typeVoulu.contains( getNomSimplifie_v2(componentType.toString()) ))
-                                    {
-                                        // Vérifiez si le champ est initialisé et est un tableau
-                                        Object fieldValue = new Array[]{}; // Remplacez null par la valeur réelle du champ
-
-
-                                        if (fieldValue.getClass().isArray())
-                                        {
-                                            if (componentType instanceof DeclaredType)
-                                            {
-                                                DeclaredType declaredComponentType = (DeclaredType) componentType;
-                                                String componentTypeName = declaredComponentType.toString();
-
-                                                // Utilisez le nom du type de composant pour effectuer des opérations supplémentaires
-                                                int tailleTab = Array.getLength(fieldValue);
-                                                // ...
-                                            }
-                                        }
-
-                                    }
-
-
-                                }
                             }
+
+                            
 
                         }
                         else if( estListe(champOuConstructeurOuMethode) )
                         {
                             String typeDansCollection = getTypeDansListe(champOuConstructeurOuMethode);
 
-                            if( typeVoulu.contains(typeDansCollection) )
+                            if( classesPackage.contains(typeDansCollection) )
                             {
                                 multiplicite = "*";
                             }
