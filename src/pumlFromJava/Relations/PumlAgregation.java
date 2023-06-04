@@ -3,7 +3,6 @@ package pumlFromJava.Relations;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
@@ -152,73 +151,71 @@ public class PumlAgregation
     }
 
 
+    // Faire une classe liaison avec classeSrc, classeDst, une classe "Role" qui contient un nom, une visibilité et une multiplicité
     public StringBuilder ajouteAgregations(StringBuilder codePumlDeBase)
     {
         StringBuilder res = new StringBuilder(codePumlDeBase);
 
+        List<String> agregationsExistantes = new ArrayList<>();   // Nous stockons toutes les agrégations dans cette liste afin de ne pas avoir de répétitions (par exemple : Boisson -- Substantif et Substantif -- Boisson)
+        List<String> typeNonVoulu = Arrays.asList("String");     // Les String ne sont pas considérés comme des types primitifs, mais nous ne les voulons pas dans l'UML
+
         // Parcourt des champs de la classe
         for( Element champOuConstructeurOuMethode : classe.getEnclosedElements() )
         {
-            // Si l'élément est un champ, ne possède pas un type primitif et la nouvelle liaison n'existe pas --> ajout de l'agrégation
+            // Si l'élément est un champ ET ne possède pas un type primitif
             if( champOuConstructeurOuMethode.getKind().equals(ElementKind.FIELD)  )
             {
-                TypeMirror typeChamp = champOuConstructeurOuMethode.asType();   // Récupération du type
-                if( !typeChamp.getKind().isPrimitive()  )
+                TypeMirror typeChamp = champOuConstructeurOuMethode.asType();
+                if( !typeChamp.getKind().isPrimitive() && !typeChamp.equals("String"))
                 {
-                    String multiplicite = "";
-                    // Nous récupérons le type
-                    String typeChampString = getTypeSimplifie(typeChamp);
-                    if( !typeChampString.equals("String") )
-                    //if( !typeNonVoulu.contains(typeChampString)  )
+                    String typeChampSimple = "";
+
+                    String typeContenuDansTab = "";
+
+                    String typeContenuDansCollectionSimple = "";
+
+                    String[] typesDansMap = new String[2];
+                    String typeCle = "";
+                    String typeValeur = "";
+
+                    // Si c'est un tableau --> nous récupérons ce qu'il y a dedans, nous faisons car sinon nous devrions ajouter dans la liste "typeNonVoulu" tous les tableaux possible (HorsLaLoi[] etc...), hors cela n'est pas optimisé et le programme ne fonctionnerait pas pour tous les packages
+                    if( estTableau(champOuConstructeurOuMethode) )
                     {
-
-                        if( classesPackage.contains(typeChampString) )
+                        ArrayType arrayType = (ArrayType) typeChamp;    // Cast pour accéder aux méthodes de la classse ArrayType
+                        typeContenuDansTab = getNomSimple(arrayType.getComponentType());
+                    }
+                    else if( estCollection(champOuConstructeurOuMethode) )
+                    {
+                        String nomCollection = getNomSimplifie_v2(getCollection(typeChamp));
+                        if( nomCollection.equals("Map") )
                         {
-                            multiplicite = "1";
+                            typesDansMap = getTypesDansMap(champOuConstructeurOuMethode);
+                            typeCle = typesDansMap[0];
+                            typeValeur = typesDansMap[1];
                         }
-                        else if( estTableau(champOuConstructeurOuMethode) )
+                        else    // Si c'est une List, Set etc... (toutes les Collections contenant un seul type d'élément)
                         {
-                            // Si je veux ne pas avoir à utiliser la fonction getNomSimplifie_v2 à chaque fois --> dans la liste typeVoulu qui contient les classes du package je mets les classes cache sans utiliser la fonction getNomSimplifie_v2
-                            String typeDansTab = getNomSimplifie_v2(((ArrayType)typeChamp).getComponentType().toString());
-                            if( classesPackage.contains( typeDansTab ))
-                            {
-                                ArrayType arrayType = (ArrayType) typeChamp;
-                                int tailleTab = arrayType.getLength();
-                                multiplicite = "0.."+tailleTab;
-                            }
-
-                            
-
+                            typeContenuDansCollectionSimple = getTypeDansCollectionSimple(champOuConstructeurOuMethode);
                         }
-                        else if( estListe(champOuConstructeurOuMethode) )
-                        {
-                            String typeDansCollection = getTypeDansListe(champOuConstructeurOuMethode);
-
-                            if( classesPackage.contains(typeDansCollection) )
-                            {
-                                multiplicite = "*";
-                            }
-
-                        }
-                        else    // Si c'est une Map
-                        {
-                            /*List<String> typesDansCollection = getTypeDansMap(champOuConstructeurOuMethode);
-
-                            // Si la clé ou la valeur de la map est une des classes du package
-                            for( String typeDansCollection : typesDansCollection )
-                            {
-                                if( typeVoulu.contains(typeDansCollection) )
-                                {
-                                    multiplicite = "*";
-                                }
-                            }*/
-
-                        }
-
-                        System.out.println("multiplicité de l'attribut '"+champOuConstructeurOuMethode.getSimpleName().toString()+"' : "+multiplicite);
+                    }
+                    else    // Si le type n'est ni un tableau ni une Collection
+                    {
+                        typeChampSimple = ((DeclaredType)typeChamp).asElement().getSimpleName().toString();
+                    }
 
 
-                        String liaison = classe.getSimpleName()+" -- "+ typeChampString;
+                    if( !typeChampSimple.equals("") && !typeChampSimple.equals("String") )
+                    {
+                        /*PumlLiaison pumlLiaison = new PumlLiaison(classe, typeChampSimple);
+                        String liaison = pumlLiaison.getLiaison();*/
+
+                        String nomRole = champOuConstructeurOuMethode.getSimpleName().toString();
+                        String visibiliteRole = getVisibiliteAttribut(champOuConstructeurOuMethode);
+                        String multiplicite = "1";
+                        String role = "\""+multiplicite+"\\n"+visibiliteRole+nomRole+"\"";
+
+
+                        String liaison = classe.getSimpleName()+" -- "+ role + " "+ typeChampSimple + " : >";
 
                         // Nous ajoutons la liaison uniquement si celle-ci n'est pas présente (sinon il y aura des doublons)
                         if( !liaisonExistante(agregationsExistantes, liaison) )
@@ -227,22 +224,92 @@ public class PumlAgregation
                             agregationsExistantes.add(liaison);   // Ajout de la liaison à la liste pour ne pas avoir de doublon(s)
                         }
                     }
-                    /*else    // Sinon si c'est un type à ne pas relier avec la classe actuelle (Pour traiter les rôles)
+                    else if( !typeContenuDansTab.equals("") && !typeContenuDansTab.equals("String") )
                     {
-                        // nomRôle, visibilité et multiplicité de la classe actuelle
-                        String nomRole = champOuConstructeurOuMethode.getSimpleName().toString();
-                        String visibilite = getVisibiliteAttribut(champOuConstructeurOuMethode);
-                        String multiplicite = getMultiplicite(champOuConstructeurOuMethode);
-                    }*/
+                        /*String nomRole = champOuConstructeurOuMethode.getSimpleName().toString();
+                        String visibiliteRole = getVisibiliteAttribut(champOuConstructeurOuMethode);
+                        String multiplicite = "0..";
 
+
+                        String role = "\""+multiplicite+"\\n"+visibiliteRole+nomRole;*/
+
+                        String liaison = classe.getSimpleName()+" -- "+ typeContenuDansTab + " : >";
+
+                        // Nous ajoutons la liaison uniquement si celle-ci n'est pas présente (sinon il y aura des doublons)
+                        if( !liaisonExistante(agregationsExistantes, liaison) )
+                        {
+                            res.append(  liaison + "\n" );      // Ajout de la liaison dans le code
+                            agregationsExistantes.add(liaison);   // Ajout de la liaison à la liste pour ne pas avoir de doublon(s)
+                        }
+                    }
+                    else if( !typeContenuDansCollectionSimple.equals("") && !typeContenuDansCollectionSimple.equals("String") )
+                    {
+                        String nomRole = champOuConstructeurOuMethode.getSimpleName().toString();
+                        String visibiliteRole = getVisibiliteAttribut(champOuConstructeurOuMethode);
+                        String multiplicite = "*";
+                        String role = "\""+multiplicite+"\\n"+visibiliteRole+nomRole+"\"";
+
+
+                        String liaison = classe.getSimpleName()+" -- "+ role + " "+ typeContenuDansCollectionSimple + " : >";
+
+                        // Nous ajoutons la liaison uniquement si celle-ci n'est pas présente (sinon il y aura des doublons)
+                        if( !liaisonExistante(agregationsExistantes, liaison) )
+                        {
+                            res.append(  liaison + "\n" );      // Ajout de la liaison dans le code
+                            agregationsExistantes.add(liaison);   // Ajout de la liaison à la liste pour ne pas avoir de doublon(s)
+                        }
+
+                    }
+                    // Sinon si la chaine typeCle n'est pas vide (donc le type de l'attribut est une Map)
+                    else if( !typeCle.equals("") )
+                    {
+                        // Il peut y avoir 2 liaisons car dans une Collection Map il y a 2 types
+                        String liaison1 = "";
+                        String liaison2 = "";
+
+                        String nomRole = champOuConstructeurOuMethode.getSimpleName().toString();
+                        String visibiliteRole = getVisibiliteAttribut(champOuConstructeurOuMethode);
+                        String multiplicite = "*";
+                        String role = "\""+multiplicite+"\\n"+visibiliteRole+nomRole+"\"";
+
+                        if( !typeCle.equals("String") )
+                        {
+                            liaison1 = classe.getSimpleName()+" -- "+ role + " "+ typeCle + " : >";
+
+                            // Nous ajoutons la liaison uniquement si celle-ci n'est pas présente (sinon il y aura des doublons)
+                            if( !liaisonExistante(agregationsExistantes, liaison1) )
+                            {
+                                res.append(  liaison1 + "\n" );      // Ajout de la liaison dans le code
+                                agregationsExistantes.add(liaison1);   // Ajout de la liaison à la liste pour ne pas avoir de doublon(s)
+                            }
+                        }
+
+                        if( !typeCle.equals("String") )
+                        {
+                            liaison2 = classe.getSimpleName()+" -- "+role+" "+ typeValeur + " : >";
+
+                            // Nous ajoutons la liaison uniquement si celle-ci n'est pas présente (sinon il y aura des doublons)
+                            if( !liaisonExistante(agregationsExistantes, liaison2) )
+                            {
+                                res.append(  liaison2 + "\n" );      // Ajout de la liaison dans le code
+                                agregationsExistantes.add(liaison2);   // Ajout de la liaison à la liste pour ne pas avoir de doublon(s)
+                            }
+
+                        }
+
+
+
+                    }
                 }
             }
         }
 
         return res;
+
     }
 
-    public String getTypeDansListe(Element attribut)
+    // Toutes les collections qui ne contiennent que un type (Comme une List ou un Set)
+    public String getTypeDansCollectionSimple(Element attribut)
     {
         String res = "";
 
@@ -262,6 +329,43 @@ public class PumlAgregation
 
         return res.toString();
     }
+
+    public String[] getTypesDansMap(Element attribut)
+    {
+        String[] res = new String[2];
+        int posTab = 0;
+
+        String typesDansMap = "";
+
+        TypeMirror typeAttribut = attribut.asType();
+        String typeEnString = typeAttribut.toString();
+
+        int posPremierChevron = typeEnString.indexOf('<');
+        int posDeuxiemeChevron = typeEnString.lastIndexOf('>');
+        for(int i=posPremierChevron+1; i<=posDeuxiemeChevron; i++)
+        {
+            if( typeEnString.charAt(i) == ',' || i == posDeuxiemeChevron)     // Sauvegrde du mot si l'on croise une virgule ou alors on est au dernier caractère
+            {
+                // il est possible que le résultat soit de type nomPackage.nomClasse donc nous utilisons la méthode getNomSimplifie_v2 pour récupérer uniquement le nom de la classe
+                typesDansMap = getNomSimplifie_v2(typesDansMap);   // J'utilise le v2 pck il prend un String en paramètre et c'est ce dont j'ai besoin
+
+                res[posTab] = typesDansMap;
+                posTab++;
+                typesDansMap = "";
+            }
+            else
+            {
+                //res.append( typeEnString.charAt(i) );
+                typesDansMap += typeEnString.charAt(i);
+            }
+        }
+
+
+
+
+        return res;
+    }
+
 
     public boolean liaisonExistante(List<String> agregationsExistantes, String liaison)
     {
@@ -382,12 +486,34 @@ public class PumlAgregation
         String typeEnString = type.toString();
         int posPremierChevron = typeEnString.indexOf("<");
 
+
         for(int i=0; i<posPremierChevron; i++)
         {
             res.append( typeEnString.charAt(i) );
         }
 
         return res.toString();
+    }
+
+    public boolean estCollection(Element attribut)
+    {
+        boolean res = false;
+
+        boolean trouve = false;
+
+        // Récupération du type de l'attribut et s'il y a un chevron '<' --> c'est une Collection
+        TypeMirror typeAttribut = attribut.asType();
+        String typeAttributEnString = typeAttribut.toString();
+        for(int i=0; i<typeAttributEnString.length() && trouve == false; i++)
+        {
+            if( typeAttributEnString.charAt(i) == '<' )
+            {
+                trouve = true;
+                res = true;
+            }
+        }
+
+        return res;
     }
 
 
