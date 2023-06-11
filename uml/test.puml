@@ -64,6 +64,7 @@ class Java2PumlTest1{
 + <<Create>> Java2PumlTest1()
 }
 
+
 class E{
 	-  mapOfInt : Integer[*] 
 	~  mapOfDoubleArray : Real[*] 

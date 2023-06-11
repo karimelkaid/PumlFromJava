@@ -69,7 +69,6 @@ public class PumlAgregation
             }
         }
 
-
         return res;
     }
 

@@ -307,7 +307,6 @@ public class PumlAttribut
     }
 
 
-
     public List<VariableElement> getAttributs()
     {
         List<VariableElement> res = new ArrayList<>();

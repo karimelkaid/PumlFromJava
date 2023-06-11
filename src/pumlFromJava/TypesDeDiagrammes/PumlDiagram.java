@@ -69,7 +69,6 @@ public class PumlDiagram
             e.printStackTrace();
         }
 
-
     }
 
     // Récupère les classes du package dans une liste

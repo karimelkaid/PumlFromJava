@@ -104,7 +104,6 @@ public class PumlConstructeur{
         return res;
     }
 
-
     public boolean estInteger(String typeAttributNomSimple )
     {
         boolean res = false;

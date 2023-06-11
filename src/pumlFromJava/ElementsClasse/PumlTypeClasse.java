@@ -49,9 +49,4 @@ public class PumlTypeClasse
 
         return res;
     }
-
-
-
-
-
 }

@@ -22,5 +22,4 @@ public class PumlPackage
         res.append("package "+nomPackage+"{\n\t");
         return res;
     }
-
 }
