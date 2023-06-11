@@ -6,6 +6,7 @@ import pumlFromJava.ElementsClasse.PumlConstructeur;
 import pumlFromJava.ElementsClasse.PumlMethode;
 import pumlFromJava.ElementsClasse.PumlTypeClasse;
 import pumlFromJava.ElementsClasse.PumlPackage;
+import pumlFromJava.Relations.PumlRelation;
 
 import javax.lang.model.element.Element;
 import java.util.ArrayList;
@@ -37,24 +38,31 @@ public class PumlDCC
 
         for( Element classe : classes )
         {
-            PumlTypeClasse pumlTypeClasse = new PumlTypeClasse(classe);
-            PumlAttribut pumlChamps = new PumlAttribut(classe);
-            PumlMethode pumlMethode = new PumlMethode(classe);
-            PumlConstructeur pumlConstructeur = new PumlConstructeur(classe);
+                PumlTypeClasse pumlTypeClasse = new PumlTypeClasse(classe);
+                PumlAttribut pumlChamps = new PumlAttribut(classe);
+                PumlMethode pumlMethode = new PumlMethode(classe);
+                PumlConstructeur pumlConstructeur = new PumlConstructeur(classe);
+                PumlRelation pumlRelation = new PumlRelation(classe,Classes);
 
             res = pumlTypeClasse.ajouteTypeClasse(res);
-            res.append("{\n");
-            res = pumlChamps.ajouteChampsDCC(res);
+            res = pumlRelation.ajouteSuperClass(res);
+            res = pumlRelation.ajouteImplementations(res);
+                res.append("{\n");
+                res = pumlChamps.ajouteChampsDCC(res);
 
-            // Nous ajoutons les constructeurs et méthodes uniquement si la classe n'est pas une énumération
-            if( !pumlTypeClasse.getTypeClasse().equals("enum") )
-            {
-                res = pumlConstructeur.ajouteConstructeurs(res);
-                res = pumlMethode.ajouteMethodes(res);
-            }
-            res.append("}\n");
+                // Nous ajoutons les constructeurs et méthodes uniquement si la classe n'est pas une énumération
+                if( !pumlTypeClasse.getTypeClasse().equals("enum") )
+                {
+                    res = pumlConstructeur.ajouteConstructeurs(res);
+                    res = pumlMethode.ajouteMethodes(res);
+                }
+                res.append("}\n");
 
-            res.append("\n\n");
+                res = pumlRelation.ajouteAgregations(res);
+                res = pumlRelation.ajouteDependances(res);
+
+                res.append("\n\n");
+
         }
         res.append("}\n@enduml\n");
 

@@ -14,6 +14,7 @@ public class PumlRelation
     PumlAgregation pumlAgregation;
     PumlSuperClass pumlSuperClass;
     PumlImplementation pumlImplementation;
+    PumlDependance pumlDependance;
 
     public PumlRelation(Element classe, List<Element> lesClasses)
     {
@@ -33,6 +34,18 @@ public class PumlRelation
 
         return res;
     }
+
+    public StringBuilder ajouteAgregationsDCA(StringBuilder codePumlDeBase)
+    {
+        StringBuilder res = new StringBuilder("");
+
+        pumlAgregation = new PumlAgregation(classe, lesClasses);
+        res = pumlAgregation.ajouteAgregationsDCA(codePumlDeBase);
+
+        return res;
+    }
+
+
 
     public StringBuilder ajouteSuperClass(StringBuilder codePumlDeBase)
     {
@@ -61,4 +74,19 @@ public class PumlRelation
 
         return res;
     }
+
+    public StringBuilder ajouteDependances(StringBuilder codePumlDeBase)
+    {
+        StringBuilder res = new StringBuilder(codePumlDeBase);
+
+        // Seule les classes normales ou les interfaces peuvent implémenter des interfaces
+        //if(typeClasse.equals("") || typeClasse.equals("interface"))
+        //{
+            pumlDependance = new PumlDependance(classe, lesClasses);
+            res = new StringBuilder(pumlDependance.analyzeClass(res));
+        //}
+
+        return res;
+    }
+
 }

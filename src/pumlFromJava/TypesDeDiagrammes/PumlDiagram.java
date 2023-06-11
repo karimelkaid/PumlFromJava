@@ -37,7 +37,7 @@ public class PumlDiagram
 
     public void generePuml()
     {
-        List<Element> Classes = recupClasses(environment);
+        List<Element> Classes = getClasses(environment);
 
         String code = "";
         if( dca )
@@ -72,7 +72,8 @@ public class PumlDiagram
 
     }
 
-    public List<Element> recupClasses(DocletEnvironment environment)
+    // Récupère les classes du package dans une liste
+    public List<Element> getClasses(DocletEnvironment environment)
     {
         List<Element> res = new ArrayList<>();
 

@@ -3,13 +3,13 @@
 package [western]{
 	class Histoire4{
 + <<Create>> Histoire4()
-+ {static} main(args:String[])
++ {static} main(args:String[*])
 }
 
 
 class Histoire2{
 + <<Create>> Histoire2()
-+ {static} main(args:String[])
++ {static} main(args:String[*])
 }
 
 
@@ -22,9 +22,12 @@ class Boisson{
 +  getNomAvecArticleDefini() : String
 +  getNomAvecPreposition(preposition:String) : String
 }
+Boisson o-- "1\n-substantif" Substantif : >
+Boisson o-- "1\n+EAU" Boisson : >
 
 
-class Personnage{
+class Personnage implements Nommable{
+	-  nom : String 
 + <<Create>> Personnage(nom:String)
 + <<Create>> Personnage(nom:String, boisson:Boisson)
 +  dire(texte:String)
@@ -36,24 +39,34 @@ class Personnage{
 + {static} getPseudos(personnages:Nommable[*]) : String
 + {static} getBoissonParDefaut() : Boisson
 }
+Personnage o-- "1\n-BOISSON_PAR_DEFAUT" Boisson : >
+Personnage o-- "1\n-boisson" Boisson : >
+Personnage ..> Boisson : <<use>>
 
 
-class Dame{
+class Dame extends Personnage{
 	-  estLibre : Boolean 
 + <<Create>> Dame(nom:String)
 + <<Create>> Dame(nom:String, boisson:Boisson)
 +  getPseudo() : String
-+  seFaireKidnapper(horsLaLoi:HorsLaLoi)
++  seFaireKidnapper(horsLaLoi:Horslaloi)
 +  seFaireLiberer(cowBoy:Cowboy)
 +  estLibre() : Boolean
 +  sePresenter()
 + {static} getBoissonParDefaut() : Boisson
 + {static} setBoissonParDefaut(boisson:Boisson)
-+  getRavisseur() : HorsLaLoi
++  getRavisseur() : Horslaloi
 }
+Dame o-- "1\n-sauveur" Cowboy : >
+Dame o-- "1\n-ravisseur" HorsLaLoi : >
+Dame o-- "1\n-boissonParDefaut" Boisson : >
+Dame ..> Cowboy : <<use>>
+Dame ..> Boisson : <<use>>
 
 
-class Brigand{
+class Brigand extends Personnage implements HorsLaLoi{
+	# {static} LOOK_PAR_DEFAUT : String 
+	-  look : String 
 	-  recompense : Integer 
 	-  estLibre : Boolean 
 + <<Create>> Brigand(nom:String)
@@ -71,9 +84,15 @@ class Brigand{
 + {static} getBoissonParDefaut() : Boisson
 + {static} setBoissonParDefaut(boisson:Boisson)
 }
+Brigand o-- "*\n-captives" Dame : >
+Brigand o-- "1\n-gardien" Cowboy : >
+Brigand o-- "1\n-boissonParDefaut" Boisson : >
+Brigand ..> Cowboy : <<use>>
+Brigand ..> Dame : <<use>>
+Brigand ..> Boisson : <<use>>
 
 
-class Ripou{
+class Ripou extends Cowboy implements HorsLaLoi{
 + <<Create>> Ripou(nom:String)
 + <<Create>> Ripou(nom:String, boisson:Boisson)
 + <<Create>> Ripou(nom:String, boisson:Boisson, look:String)
@@ -88,9 +107,12 @@ class Ripou{
 +  sePresenter()
 +  liberer(dame:Dame)
 }
+Ripou o-- "1\n-brigand" Brigand : >
+Ripou ..> Dame : <<use>>
+Ripou ..> Cowboy : <<use>>
 
 
-interface HorsLaLoi <<interface>>{
+interface HorsLaLoi <<interface>> extends Nommable{
 +  estLibre() : Boolean
 +  getRecompense() : Integer
 +  kidnapper(dame:Dame)
@@ -99,6 +121,8 @@ interface HorsLaLoi <<interface>>{
 +  getLook() : String
 +  getCaptives() : Dame[*]
 }
+HorsLaLoi ..> Cowboy : <<use>>
+HorsLaLoi ..> Dame : <<use>>
 
 
 enum Genre <<enum>>{
@@ -113,27 +137,32 @@ interface Nommable <<interface>>{
 }
 
 
-class Cowboy{
+class Cowboy extends Personnage{
 	-  gains : Integer 
 + <<Create>> Cowboy(nom:String)
 + <<Create>> Cowboy(nom:String, boisson:Boisson)
 +  getPseudo() : String
 +  liberer(dame:Dame)
 +  liberer(captives:Dame[*])
-+  capturer(horsLaLoi:HorsLaLoi)
-+  tirerSur(brigand:HorsLaLoi)
++  capturer(horsLaLoi:Horslaloi)
++  tirerSur(brigand:Horslaloi)
 +  sePresenter()
 + {static} getBoissonParDefaut() : Boisson
 + {static} setBoissonParDefaut(boisson:Boisson)
 }
+Cowboy o-- "*\n-captures" HorsLaLoi : >
+Cowboy o-- "1\n-boissonParDefaut" Boisson : >
+Cowboy ..> Boisson : <<use>>
+Cowboy ..> Dame : <<use>>
 
 
 class Substantif{
+	-  nom : String 
 + <<Create>> Substantif(nom:String, genre:Genre)
 +  getNom() : String
 +  getGenre() : Genre
 +  toString() : String
-+ {static} isVowel(c:Integer) : Boolean
++ {static} isVowel(c:String) : Boolean
 + {static} startsWithVowel(s:String) : Boolean
 +  getArticleIndefini() : String
 +  avecArticleIndefini() : String
@@ -147,9 +176,10 @@ class Substantif{
 +  avecElision(article:String) : String
 +  avecPreposition(preposition:String) : String
 }
+Substantif o-- "1\n-genre" Genre : >
 
 
-class Narrateur{
+class Narrateur extends Personnage{
 + <<Create>> Narrateur()
 + <<Create>> Narrateur(nom:String)
 +  dire(texte:String)
@@ -157,6 +187,7 @@ class Narrateur{
 +  boire()
 +  getPseudo() : String
 }
+Narrateur ..> Boisson : <<use>>
 
 
 }

@@ -47,7 +47,7 @@ public class PumlDCA
             res = pumlChamps.ajouteChampsDCA(res);
             res.append("}\n");
 
-            res = pumlRelation.ajouteAgregations(res);
+            res = pumlRelation.ajouteAgregationsDCA(res);
 
             res.append("\n\n");
         }

@@ -66,7 +66,7 @@ les éléments sélectionnés.
 > ###### Objectif
 > - Modéliser l'API *Java Language Model*
 > - Produire le DCA sans les associations.  
-  test.A ce stade le DCA produit montre les classes, interfaces et énumérations
+  test.Java2PumlTest1.A ce stade le DCA produit montre les classes, interfaces et énumérations
   avec les noms des attributs caractéristiques (attributs dont le type est un type primitif)
   et les noms des constantes pour les énumérations.
 

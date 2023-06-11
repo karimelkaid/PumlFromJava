@@ -21,27 +21,27 @@ public class PumlConstructeur{
         this.nomClasse = classe.getSimpleName().toString();
         this.constructeurs = new ArrayList<>();
     }
-    public String getTypeSimplifie(TypeMirror typeMirror)
+    public String TraduisTypeEnUML(TypeMirror typeMirror)
     {
         String res = "";
+
+        String typeMethodeNomSimple = getNomSimple(typeMirror);
 
         if (typeMirror.getKind() == TypeKind.VOID) {
             res = "void";
         }
-        else if (typeMirror.getKind().isPrimitive())
+        else if( estInteger(typeMethodeNomSimple ))
         {
-            // Si le type de l'attribut est un réel --> nous mettons Integer, sinon juste la 1ère lettre est en majuscule
-            if( estReel(typeMirror.toString()) )
-            {
-                res = "Integer";
-            }
-            else
-            {
-                res = premiereLettreEnMajuscule(typeMirror.toString());
-            }
-
+            res = "Integer";
         }
-
+        else if( estReel(typeMethodeNomSimple) )
+        {
+            res = "Real";
+        }
+        else if( typeMethodeNomSimple.equals("Character") || typeMethodeNomSimple.equals("Char") || typeMethodeNomSimple.equals("char") )
+        {
+            res = "String";
+        }
         else if (typeMirror.getKind().equals(TypeKind.ARRAY))
         {
             ArrayType arrayType = (ArrayType) typeMirror;
@@ -62,7 +62,7 @@ public class PumlConstructeur{
         }
         else
         {
-            res = getNomSimple(typeMirror);
+            res = premiereLettreEnMajuscule(getNomSimple(typeMirror));
         }
 
         return res;
@@ -105,11 +105,60 @@ public class PumlConstructeur{
     }
 
 
-    public boolean estReel( String type )
+    public boolean estInteger(String typeAttributNomSimple )
     {
         boolean res = false;
 
-        if( type.equals("int") || type.equals("double") || type.equals("byte") || type.equals("double") || type.equals("short") || type.equals("char") || type.equals("long") || type.equals("float"))
+        List<String> nomsTypesInteger = new ArrayList<>();
+        nomsTypesInteger.add("int");
+        nomsTypesInteger.add("byte");
+        nomsTypesInteger.add("char");
+        nomsTypesInteger.add("short");
+        nomsTypesInteger.add("long");
+
+        // Il est possible d'utiliser le type Double au lieu de double, java fait une différence entre les 2 donc nous faisons également la différence et nous ajoutons pour chaque type sa classe
+        List<String> temp = new ArrayList<>();
+        for( String nomType : nomsTypesInteger )
+        {
+            String nomClasseDuType = premiereLettreEnMajuscule(nomType);
+            temp.add(nomClasseDuType);
+        }
+        for( String nomType : temp )
+        {
+            nomsTypesInteger.add(nomType);
+        }
+
+        // Vérification
+        if( nomsTypesInteger.contains(typeAttributNomSimple) )
+        {
+            res = true;
+        }
+
+        return res;
+    }
+
+    public boolean estReel(String typeAttributNomSimple )
+    {
+        boolean res = false;
+
+        List<String> nomsTypesReel = new ArrayList<>();
+        nomsTypesReel.add("double");
+        nomsTypesReel.add("float");
+
+        // Il est possible d'utiliser le type Double au lieu de double, java fait une différence entre les 2 donc nous faisons également la différence et nous ajoutons pour chaque type sa classe
+        List<String> temp = new ArrayList<>();
+        for( String nomType : nomsTypesReel )
+        {
+            String nomClasseDuType = premiereLettreEnMajuscule(nomType);
+            temp.add(nomClasseDuType);
+        }
+        for( String nomType : temp )
+        {
+            nomsTypesReel.add(nomType);
+        }
+
+
+        if( nomsTypesReel.contains(typeAttributNomSimple) )
         {
             res = true;
         }
@@ -186,6 +235,13 @@ public class PumlConstructeur{
             }
         }
 
+        // Si l'élément n'a pas de visibilitée --> nous mettons un tilde '~'
+        if( res.equals("") )
+        {
+            res = "~";
+        }
+
+
         return res;
     }
 
@@ -195,7 +251,7 @@ public class PumlConstructeur{
         parametres.append("(");
         for (VariableElement parameter : methode.getParameters())
         {
-            String typeParametre = getTypeSimplifie(parameter.asType());
+            String typeParametre = TraduisTypeEnUML(parameter.asType());
             String nomParametre = parameter.getSimpleName().toString();
             parametres.append(nomParametre).append(":").append(typeParametre).append(", ");
         }

@@ -2,46 +2,62 @@
 
 package [test]{
 	class B{
- <<Create>> B()
+	-  anInteger : Integer 
+	#  aShort : Integer 
+	~  aLong : Integer 
+	+  aByte : Integer 
+	-  aFloat : Real {ReadOnly}
+	# {static} aDouble : Real 
+	~ {static} aCharacter : String {ReadOnly}
+	+ {static} aBoolean : Boolean {ReadOnly}
+~ <<Create>> B()
 -  anIntFunction(anIntParam:Integer) : Integer
-~  aShortFunction(aShortParam:Short) : Short
-  aLongFunction(aLongParam:Long) : Long
-+  aByteFunction(aByteParam:Byte) : Byte
--  aFloatFunction(aFloatParam:Float) : Float
-~  aDoubleFunction(aDoubleParam:Double) : Double
- {static} aCharacterFunction(aCharacterParam:Character) : Character
+#  aShortFunction(aShortParam:Integer) : Integer
+~  aLongFunction(aLongParam:Integer) : Integer
++  aByteFunction(aByteParam:Integer) : Integer
+-  aFloatFunction(aFloatParam:Real) : Real
+#  aDoubleFunction(aDoubleParam:Real) : Real
+~ {static} aCharacterFunction(aCharacterParam:String) : String
 + {static} aBooleanFunction(aBooleanParam:Boolean) : Boolean
 }
 
 
 class A{
 	-  anInt : Integer 
-	~  aShort : Integer 
-	  aLong : Integer 
+	#  aShort : Integer 
+	~  aLong : Integer 
 	+  aByte : Integer 
-	-  aFloat : Integer {ReadOnly}
-	~ {static} aDouble : Integer 
-	 {static} aChar : Integer {ReadOnly}
+	-  aFloat : Real {ReadOnly}
+	# {static} aDouble : Real 
+	~ {static} aChar : String {ReadOnly}
 	+ {static} aBoolean : Boolean {ReadOnly}
- <<Create>> A()
+~ <<Create>> A()
 -  anIntFunction(anIntParam:Integer) : Integer
-~  aShortFunction(aShortParam:Integer) : Integer
-  aLongFunction(aLongParam:Integer) : Integer
+#  aShortFunction(aShortParam:Integer) : Integer
+~  aLongFunction(aLongParam:Integer) : Integer
 +  aByteFunction(aByteParam:Integer) : Integer
-- {static} aFloatFunction(aFloatParam:Integer) : Integer
-~ {static} aDoubleFunction(aDoubleParam:Integer) : Integer
- {static} aCharFunction(aCharParam:Integer) : Integer
+- {static} aFloatFunction(aFloatParam:Real) : Real
+# {static} aDoubleFunction(aDoubleParam:Real) : Real
+~ {static} aCharFunction(aCharParam:String) : String
 + {static} aBooleanFunction(aBooleanParam:Boolean) : Boolean
 }
 
 
 class D{
- <<Create>> D()
--  aFunction(a0:A, a1:A[], a2:A[][], a3:A[][][]) : A
-  bFunction(b0:B, b1:B>[], b2:B>[]>[], b3:B>[]>[]>[]) : B[]
-~  cFunction(c0:C, c1:C[][*], c2:C[]>[][*], c3:C[]>[]>[][*]) : C[*]
-+ {static} dFunction(d0:D, d1:D>, d2:D>, d3:D>, d4:D>) : D>
+~ <<Create>> D()
+-  aFunction(a0:A, a1:A[*], a2:A[*], a3:A[*]) : A
+~  bFunction(b0:B, b1:B[*], b2:B[*], b3:B[*]) : B[*]
+#  cFunction(c0:C, c1:C[*], c2:C[*], c3:C[*]) : C[*]
++ {static} dFunction(d0:D, d1:D[*], d2:D[*], d3:D[*], d4:C[*]) : D[*]
 }
+D o-- "1\n-a" A : >
+D o-- "*\n~bs" B : >
+D o-- "*\n~cs" C : >
+D o-- "*\n+ds" D : >
+D ..> B : <<use>>
+D ..> A : <<use>>
+D ..> D : <<use>>
+D ..> C : <<use>>
 
 
 class Java2PumlTest1{
@@ -50,24 +66,36 @@ class Java2PumlTest1{
 
 
 class E{
- <<Create>> E()
--  mapOfIntFunction(a0:Integer>, a1:Integer[]>, a2:Integer[][]>, a3:Integer[][][]>) : Integer>
-  mapOfDoubleArrayFunction(a0:Double[]>, a1:Double>>, a2:Double[]>>, a3:Double[]>>>) : Double[]>
-~  mapOfAFunction(a0:A>, a1:A>>, a2:A>[]>, a3:A>>) : A>
-+ {static} mapOfArrayOfAFunction(a0:A[]>, a1:A[]>>, a2:A[]>[]>, a3:A[]>>) : A[]>
+	-  mapOfInt : Integer[*] 
+	~  mapOfDoubleArray : Real[*] 
+~ <<Create>> E()
+-  mapOfIntFunction(a0:Integer[*], a1:String[*], a2:String[*], a3:Integer[*]) : Integer[*]
+~  mapOfDoubleArrayFunction(a0:Real[*], a1:Real[*], a2:Integer[*], a3:Integer[*]) : Real[*]
+#  mapOfAFunction(a0:A[*], a1:A[*], a2:A[*], a3:Integer[*]) : A[*]
++ {static} mapOfArrayOfAFunction(a0:A[*], a1:A[*], a2:A[*], a3:Real[*]) : A[*]
 }
+E o-- "*\n~mapOfA" A : >
+E o-- "*\n+mapOfArrayOfA" A : >
 
 
 class C{
- <<Create>> C()
--  anIntArrayFunction(anIntArrayParam:int[]) : int[]
-~  aShortArrayFunction(aShortArrayParam:Short[]) : Short[]
-  aLong3DArrayFunction(someLongs:long[][][][]) : long[][][]
-+  aByte5DArrayFunction(someBytes:Byte[][][][][][]) : Byte[][][][][]
--  aFloatListFunction(aFloatListParam:Float[*]) : Float[*]
-~  aListOfDoubleListFunction(someDoubles:Double>>[*]) : Double>[*]
-  aCharacterSetFunction(aCharacterSetParam:Character>) : Character>
-+  aSetOfBooleanListFunction(someBooleans:Boolean[][]>[]>>) : Boolean>>
+	-  anIntArray : Integer[*] 
+	#  aShortArray : Integer[*] 
+	~  anArrayOfLongArray : Integer[*] 
+	+  anArrayOfByteArray : Integer[*] 
+	-  aFloatList : Real[*] {ReadOnly}
+	# {static} aListOfDoubleList : Real[*] 
+	~ {static} aSetOfCharacter : String[*] {ReadOnly}
+	+ {static} aSetOfBooleanList : Boolean[*] {ReadOnly}
+~ <<Create>> C()
+-  anIntArrayFunction(anIntArrayParam:Integer[*]) : Integer[*]
+#  aShortArrayFunction(aShortArrayParam:Integer[*]) : Integer[*]
+~  aLong3DArrayFunction(someLongs:Integer[*]) : Integer[*]
++  aByte5DArrayFunction(someBytes:Integer[*]) : Integer[*]
+-  aFloatListFunction(aFloatListParam:Real[*]) : Real[*]
+#  aListOfDoubleListFunction(someDoubles:Real[*]) : Real[*]
+~  aCharacterSetFunction(aCharacterSetParam:String[*]) : String[*]
++  aSetOfBooleanListFunction(someBooleans:Boolean[*]) : Boolean[*]
 }
 
 
