@@ -21,13 +21,6 @@ Le développement s'est déroulé sur plusieurs semaines, avec des objectifs sp�
 - Diagrammes de séquence, de classes et d'architecture mis à jour hebdomadairement.
 - Code source de l'outil `Java2Puml` et des différentes classes de l'API.
 - Rapports hebdomadaires documentant les progrès et les réalisations.
-
-### Documentation supplémentaire
-Des liens vers la documentation officielle de JavaDoc, les interfaces utilisées et les articles pertinents sont fournis pour ceux qui souhaitent explorer plus en détail la mécanique du projet.
-
-### Galerie
-Des exemples de diagrammes générés sont disponibles pour illustrer les résultats obtenus à chaque étape.
-
 ---
 
 Ce README vise à fournir un aperçu clair et structuré du projet PumlFromJava pour les visiteurs de mon GitHub. Pour tout commentaire ou question, n'hésitez pas à me contacter directement.
