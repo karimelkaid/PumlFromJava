@@ -8,6 +8,9 @@ Ce projet, réalisé en collaboration avec Jawad AMJAHAD dans le cadre de la SAE
 - Exclusion des types imbriqués, génériques et modules pour se concentrer sur la structure de base.
 - Une commande `Java2Puml` configurable via IntelliJ ou la ligne de commande pour une utilisation facile et flexible.
 
+## 📂 Organisation des Branches
+**🔔 Chaque rendu hebdomadaire est organisé dans une branche dédiée, assurant une navigation et un suivi clairs de l'évolution du projet. Consultez les branches pour voir les avancées spécifiques de chaque semaine.**
+
 ### Progression et méthodologie
 Le développement s'est déroulé sur plusieurs semaines, avec des objectifs spécifiques à atteindre à chaque étape :
 - **Semaine 1 :** Mise en place des `doclets` de javadoc pour générer un diagramme simple.
