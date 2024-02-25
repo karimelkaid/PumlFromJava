@@ -13,7 +13,7 @@ Ce guide vous montre comment générer un diagramme UML à partir de votre code 
    - Lancez IntelliJ IDEA dans le répertoire `p21_projet`.
 
 4. **Création d'un Package**:
-   - Dans le dossier `src`, créez un nouveau package. Par exemple: `src/nomPackage`.
+   - Dans le dossier `src/`, créez un nouveau package. Par exemple: `src/nomPackage`.
 
 5. **Organisation des Classes**:
    - Placez vos classes et sous-packages dans le package créé (`src/nomPackage`).
