@@ -20,7 +20,7 @@ Ce guide vous montre comment générer un diagramme UML à partir de votre code 
 
 6. **Configuration du Fichier `Java2Puml`**:
    - Ouvrez le fichier `src/pumlFromJava/Java2Puml`.
-   - Dans le tableau `arguments`, modifiez la septième valeur (en commençant à 0) pour inclure le nom de votre package, `"nomPackage"`, contenant votre code source. Gardez les guillemets.
+   - Dans le tableau nommé `arguments`, modifiez la septième valeur (en commençant à 0) pour inclure le nom de votre package, `"nomPackage"`, contenant votre code source. Gardez les guillemets.
 
 7. **Exécution du Programme**:
    - Exécutez le programme en cliquant sur la flèche verte située en haut à droite de l'interface IntelliJ.
