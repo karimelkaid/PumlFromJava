@@ -27,7 +27,7 @@ Ce guide vous montre comment générer un diagramme UML à partir de votre code 
 
 8. **Génération du Fichier PlantUML**:
    - Un fichier PlantUML sera généré s'il n'existe pas encore.
-   - Ce fichier portera le même nom que le package créé à l'étape 3 et se trouvera dans le répertoire `uml/`.
+   - Ce fichier portera le même nom que le package créé à l'étape 4 et se trouvera dans le répertoire `uml/`.
 
 ## Conclusion
 
