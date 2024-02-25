@@ -26,8 +26,8 @@ Ce guide vous montre comment générer un diagramme UML à partir de votre code 
    - Exécutez le programme en cliquant sur la flèche verte située en haut à droite de l'interface IntelliJ.
 
 8. **Génération du Fichier PlantUML**:
-   - Un fichier PlantUML sera généré si nécessaire.
-   - Ce fichier portera le même nom que le package créé à l'étape 2 et se trouvera dans le répertoire `uml/`.
+   - Un fichier PlantUML sera généré s'il n'existe pas encore.
+   - Ce fichier portera le même nom que le package créé à l'étape 3 et se trouvera dans le répertoire `uml/`.
 
 ## Conclusion
 
