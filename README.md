@@ -24,6 +24,11 @@ Le développement s'est déroulé sur plusieurs semaines, avec des objectifs sp�
 - Diagrammes de séquence, de classes et d'architecture mis à jour hebdomadairement.
 - Code source de l'outil `Java2Puml` et des différentes classes de l'API.
 - Rapports hebdomadaires documentant les progrès et les réalisations.
+
+## Génération de Votre Diagramme UML
+
+Pour apprendre comment générer votre propre diagramme UML en utilisant le projet PumlFromJava, veuillez consulter le fichier [`testez.md`](testez.md) pour un guide détaillé étape par étape.
+
 ---
 
 Ce README vise à fournir un aperçu clair et structuré du projet PumlFromJava pour les visiteurs de mon GitHub. Pour tout commentaire ou question, n'hésitez pas à me contacter directement.
